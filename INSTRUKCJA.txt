@@ -1,0 +1,95 @@
+PROJEKT ZALICZENIOWY — INSTALACJA NA INNYM KOMPUTERZE
+
+1. Zainstaluj XAMPP z PHP 8.2+ (Apache, PHP, MariaDB i phpMyAdmin):
+https://www.apachefriends.org/download.html
+Zainstaluj Composer: https://getcomposer.org/download/
+W instalatorze wybierz C:\xampp\php\php.exe.
+
+2. https://github.com/pzx119592/WSB_Projekt_ByteGear -> Code -> Download ZIP.
+Rozpakuj folder, nazwij go bytegear i umieść w C:\xampp\htdocs.
+Plik artisan ma być bezpośrednio w C:\xampp\htdocs\bytegear.
+Nie kopiuj projektu do project_1: to osobna aplikacja.
+Alternatywnie z Git:
+git clone https://github.com/pzx119592/WSB_Projekt_ByteGear.git C:\xampp\htdocs\bytegear
+
+3. W XAMPP uruchom MySQL i Apache.
+http://localhost/phpmyadmin -> utwórz pustą bazę bytegear (utf8mb4_unicode_ci).
+Jeżeli taka baza istnieje i zawiera Twoje dane, wybierz inną nową nazwę.
+Nie usuwaj wcześniejszej bazy project z ćwiczeń.
+
+4. Otwórz PowerShell:
+cd C:\xampp\htdocs\bytegear
+$env:Path = "C:\xampp\php;" + $env:Path
+php --version
+composer --version
+Copy-Item .env.example .env
+composer install
+composer check-platform-reqs
+
+5. W .env sprawdź:
+APP_NAME="ByteGear"
+APP_URL=http://127.0.0.1:8002
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=bytegear
+DB_USERNAME=root
+DB_PASSWORD=
+
+Wpisz właściwe hasło/port/konto, jeśli Twój MariaDB używa innych danych.
+Zostaw SESSION_DRIVER=database i CACHE_STORE=database.
+APP_NAME zmienia nazwę w całym sklepie. Możesz od razu wpisać własną nazwę.
+
+6. W terminalu:
+php artisan key:generate
+php artisan config:clear
+php artisan migrate --seed
+php artisan serve --host=127.0.0.1 --port=8002
+
+Terminal zostaje otwarty. Ctrl+C zatrzymuje serwer.
+Nie potrzeba npm, Node.js, instalatora Laravel ani osobnego importu SQL.
+Migracje i seeder odtwarzają strukturę, katalog oraz konta demonstracyjne.
+Używaj composer install, aby zachować wersje z composer.lock.
+Nie używaj migrate:fresh na bazie z własnymi danymi.
+
+7. Otwórz http://127.0.0.1:8002/.
+Konta po seedowaniu (hasło wszystkich: DemoSklep123!):
+admin@example.test — administrator
+moderator@example.test — moderator
+customer@example.test — klient
+
+ADRESY DO POKAZANIA
+http://127.0.0.1:8002/ — katalog i wyszukiwarka.
+http://127.0.0.1:8002/rejestracja — nowe konto klienta.
+http://127.0.0.1:8002/logowanie — logowanie do właściwego panelu.
+http://127.0.0.1:8002/koszyk — zmiana ilości i usuwanie produktów.
+http://127.0.0.1:8002/zamowienie — formularz dostawy po zalogowaniu i dodaniu produktu.
+http://127.0.0.1:8002/konto — ekran zależny od roli.
+http://127.0.0.1:8002/zamowienia — własne zamówienia.
+http://127.0.0.1:8002/panel/products — moderator/administrator, produkty.
+http://127.0.0.1:8002/panel/orders — moderator/administrator, wszystkie zamówienia.
+http://127.0.0.1:8002/panel/users — tylko administrator, użytkownicy.
+Na stronie produktu link do orientacyjnej ceny EUR pobiera kurs z NBP.
+Reszta sklepu działa offline po instalacji zależności. E-mail dodamy później.
+
+KOLEJNE URUCHOMIENIE
+Włącz MySQL. W PowerShell:
+cd C:\xampp\htdocs\bytegear
+$env:Path = "C:\xampp\php;" + $env:Path
+php artisan serve --port=8002
+
+Dla phpMyAdmin włącz także Apache. Nie generuj ponownie APP_KEY i nie kopiuj .env.
+Jeśli port zajęty, wybierz inny --port i używaj go w przeglądarce.
+Testy: php artisan test (w drugim terminalu, wymaga pdo_sqlite).
+
+ZMIANA NAZWY
+APP_NAME="Moja nowa nazwa" w .env -> php artisan config:clear -> odśwież stronę.
+Żeby nazwa trafiła do nowych pobrań, zmień też .env.example w repozytorium.
+Nie trzeba zmieniać nazw tabel, folderu ani repozytorium.
+
+AKTUALIZACJE
+Zachowaj .env i bazę. Pobierz nowe pliki, wykonaj composer install,
+php artisan config:clear, php artisan view:clear i php artisan migrate.
+Przed podmianą własnych plików zrób kopię. Seeder nie resetuje istniejących danych.
+Pełną kopię własnych zamówień/kont zrób w phpMyAdmin -> baza -> Eksport -> SQL
+i zachowaj prywatnie. Publiczne repozytorium odtwarza przykładowy katalog, nie Twoje zakupy.

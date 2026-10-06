@@ -1,0 +1,43 @@
+SCENARIUSZ PREZENTACJI PROJEKTU ZALICZENIOWEGO
+
+1. Pokaż katalog: kategorie, wyszukiwarkę, cenę i sortowanie.
+2. Zarejestruj nowego klienta. Wyjaśnij, że w bazie jest hash hasła, nie jawne hasło.
+3. Zaloguj się. Pokaż ekran klienta i puste/własne zamówienia.
+4. Dodaj 2 produkty. Zmień ilość, usuń jeden — koszyk korzysta z sesji.
+5. Złóż zamówienie: dane dostawy, kod np. 00-001. Pokaż zapisane pozycje i kwotę.
+6. Spróbuj otworzyć /panel/users jako klient — dostęp zostanie zablokowany.
+7. Wyloguj się i zaloguj jako moderator@example.test (DemoSklep123!).
+   Pokaż ekran produktów. Dodaj produkt z poprawnym SKU, edytuj i wycofaj z oferty.
+   Pokaż zamówienie klienta: Nowe -> W realizacji -> Zrealizowane.
+   Moderator nie ma dostępu do użytkowników.
+8. Wyloguj się i zaloguj jako admin@example.test (DemoSklep123!).
+   Pokaż listę użytkowników, szczegóły, dodanie nowego użytkownika, zmianę danych
+   i usunięcie dodanego konta. Ostatnie konto administratora jest chronione.
+9. Pokaż walidację: puste pola, błędny e-mail, słabe hasło, kod bez myślnika,
+   SKU zawierający spacje. Walidacja działa też po stronie PHP.
+10. W produkcie kliknij cenę EUR — demonstracja API NBP i bezpiecznej obsługi braku Internetu.
+
+KOD DO WYJAŚNIENIA (MVC)
+routes/web.php — routing GET/POST/PUT/PATCH/DELETE i middleware ról.
+app/Models — Eloquent i relacje: Category->Product, Order->OrderItem, Order->User.
+app/Http/Controllers — logika rejestracji, katalogu, koszyka, zamówień i panelu.
+resources/views — HTML5 i Blade. {{ }} ucieka HTML; @csrf chroni formularze.
+database/migrations — tworzenie tabel i kluczy obcych.
+database/seeders/ShopSeeder.php — dane demonstracyjne.
+app/Services/Cart.php — odczyt koszyka w sesji, ceny z bazy.
+OrderController::store — DB::transaction, lockForUpdate, zapis pozycji i stanu.
+AdminUserController — CRUD, hashowanie i ochrona ostatniego administratora.
+CatalogController — zapytania parametryzowane, dozwolona lista sortowania i API.
+public/css/shop.css i public/images — lokalny wygląd i grafiki.
+.env APP_NAME — zmiana nazwy sklepu bez szukania w plikach.
+
+Hasła są HASHOWANE przez Laravel, nie szyfrowane odwracalnie.
+SQL Injection: dane przekazywane jako parametry Eloquent; nazwy kolumn sortowania
+pochodzą wyłącznie z listy w kodzie, nie bezpośrednio od użytkownika.
+Regex: hasło (mała/duża litera i cyfra), SKU ([A-Z0-9-]), kod pocztowy (00-000).
+Należność liczona na serwerze w groszach; ukryte pole formularza nie określa ceny.
+Pozycje zamówienia przechowują historyczną nazwę i cenę.
+
+Do samodzielnego przećwiczenia: wyjaśnij drogę żądania od trasy przez kontroler
+i model do widoku. Zmień opis produktu w panelu i odnajdź odpowiednią metodę w kodzie.
+Aktywacja konta przez e-mail: cel kolejnego etapu, jeszcze nie jest wdrożona.
