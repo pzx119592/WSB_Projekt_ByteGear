@@ -6,6 +6,7 @@ Osobna aplikacja, repozytorium i baza; wcześniejsze ćwiczenia pozostają w WSB
 **Uruchomienie na drugim komputerze:** [INSTRUKCJA.txt](INSTRUKCJA.txt).
 **Co pokazać nauczycielowi:** [PREZENTACJA.txt](PREZENTACJA.txt).
 **Wymagania i powiązanie z kodem:** [docs/WYMAGANIA.md](docs/WYMAGANIA.md).
+**Pliki, metody i konfiguracja do obrony:** [KOD_I_KONFIGURACJA_DO_OBRONY.txt](KOD_I_KONFIGURACJA_DO_OBRONY.txt).
 
 ## Uruchomienie
 

@@ -1,5 +1,7 @@
 PROJEKT ZALICZENIOWY — WYMAGANIA I GOTOWE ADRESY DO POKAZANIA
 
+Dokładna mapa plików, metod i konfiguracji: KOD_I_KONFIGURACJA_DO_OBRONY.txt.
+
 PRZYGOTOWANIE
 Uruchom MariaDB w XAMPP, serwer sklepu na 8002 oraz Mailpit według INSTRUKCJA.txt.
 Konta demo (hasło DemoSklep123!):

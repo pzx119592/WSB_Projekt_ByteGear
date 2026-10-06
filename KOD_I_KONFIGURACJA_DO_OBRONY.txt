@@ -1,0 +1,236 @@
+PROJEKT ZALICZENIOWY — GDZIE POKAZAĆ KOD I KONFIGURACJĘ
+
+JAK KORZYSTAĆ
+Otwórz cały folder C:\xampp\htdocs\bytegear w Visual Studio Code.
+Ctrl+P -> wklej ścieżkę podaną poniżej -> Enter.
+Ctrl+F -> wpisz podaną metodę lub fragment kodu.
+Ścieżki są względem folderu projektu. Metody są pewniejsze niż numery linii,
+które mogą się zmieniać po aktualizacjach. Czytaj wyjaśnienia i przećwicz je.
+WYMAGANIA_DO_POKAZANIA.txt zawiera osobno adresy i scenariusze w przeglądarce.
+
+1. „GDZIE JEST POŁĄCZENIE Z BAZĄ?”
+Otwórz: .env (lokalnie), a do publicznego pokazu najlepiej .env.example.
+Znajdź: DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD.
+Obecnie: mysql, 127.0.0.1, 3306, bytegear. Serwer to MariaDB z XAMPP.
+Otwórz też: config/database.php -> 'default' oraz sekcja 'mysql'.
+Wyjaśnienie: .env zawiera ustawienia komputera; config/database.php odczytuje je
+przez env(). Modele korzystają z tego połączenia, nie otwierają własnego mysqli.
+Po zmianie konfiguracji: php artisan config:clear.
+Nie pokazuj rzeczywistych haseł, APP_KEY ani danych SMTP na publicznym nagraniu.
+.env.example to wzór, nie aktywna konfiguracja; .env jest pomijany przez .gitignore.
+
+2. „GDZIE POWSTAJĄ TABELE I ROLA UŻYTKOWNIKA?”
+Otwórz: database/migrations/0001_01_01_000000_create_users_table.php.
+Znajdź: Schema::create('users'), email_verified_at, password_reset_tokens, sessions.
+Otwórz: database/migrations/2026_10_06_000001_create_shop_tables.php.
+Znajdź: Schema::table('users') i ->string('role')->default('customer').
+Dalej: Schema::create('categories'), 'products', 'orders', 'order_items'.
+Wyjaśnienie: migracje opisują strukturę bazy; php artisan migrate ją tworzy.
+Klucze obce łączą produkty z kategoriami i zamówienia z użytkownikami/pozycjami.
+Seeder to dane początkowe: database/seeders/ShopSeeder.php -> run().
+Konta demo i 18 produktów są odtwarzane poleceniem php artisan migrate --seed.
+Nie używaj migrate:fresh podczas obrony — usuwa dane.
+
+3. „GDZIE SĄ ADRESY STRON?”
+Otwórz: routes/web.php.
+Znajdź: Route::get('/'), '/rejestracja', '/koszyk', '/zamowienie'.
+Wyjaśnienie: GET wyświetla stronę, POST zapisuje lub wykonuje akcję,
+PATCH/PUT zmienia dane, DELETE obsługuje usuwanie/wycofanie.
+Route::resource('users', ...) rejestruje komplet tras CRUD.
+Nazwy ->name(...) pozwalają tworzyć adresy przez route('login') itd.
+Otwórz: bootstrap/app.php -> withRouting() oraz withMiddleware().
+Wyjaśnienie: tutaj podpięto routes/web.php i alias role do RequireRole.
+Polecenie do sprawdzenia: php artisan route:list.
+
+4. „GDZIE JEST MVC?”
+Model: app/Models/Product.php — struktura danych, pola i relacja category().
+Kontroler: app/Http/Controllers/CatalogController.php -> index().
+Widok: resources/views/catalog/index.blade.php.
+Trasa: routes/web.php -> Route::get('/', [CatalogController::class, 'index']).
+Wyjaśnienie przepływu: adres / trafia do kontrolera, kontroler pyta model Product
+o dane, przekazuje je przez view('catalog.index', ...), Blade generuje HTML.
+Modele dziedziczą po Model; User dziedziczy po Authenticatable.
+Relacje: Category::products(), Product::category(), Order::items()/user(),
+OrderItem::order(). Laravel domyślnie wiąże np. Product z tabelą products.
+
+5. „GDZIE JEST HTML I CSS?”
+Otwórz: resources/views/layouts/app.blade.php.
+Znajdź: <!DOCTYPE html>, <head>, asset('css/shop.css'), @yield('content').
+Otwórz: public/css/shop.css — style oraz reguły responsywności.
+Otwórz: resources/views/auth/register.blade.php -> @extends('layouts.app').
+Wyjaśnienie: wspólny layout zawiera nagłówek, menu i stopkę;
+widoki poszczególnych stron dostarczają zawartość przez @section.
+Grafiki: public/images/*.svg. Nie potrzeba kompilacji przez npm.
+
+6. „GDZIE REJESTRUJESZ UŻYTKOWNIKA?”
+Formularz: resources/views/auth/register.blade.php -> POST, @csrf, nazwy pól.
+Trasa: routes/web.php -> register.store.
+Kontroler: app/Http/Controllers/AuthController.php -> register().
+Znajdź: $request->validate(...), $data['role'] = 'customer', User::create($data).
+Wyjaśnienie: serwer sprawdza dane, wymusza rolę klienta i zapisuje model w bazie.
+Przesłanie role=admin z formularza nie nada uprawnień administratora.
+AccountMail::verify($user) wysyła wiadomość aktywacyjną po utworzeniu konta.
+
+7. „GDZIE SZYFRUJESZ HASŁO?”
+Otwórz: app/Models/User.php -> casts() -> 'password' => 'hashed'.
+Wyjaśnienie: to HASHOWANIE. Laravel zapisuje jednokierunkowy hash przy przypisaniu
+hasła do modelu, także w rejestracji i CRUD administratora.
+Hasła nie można odczytać z tego hasha. Przy logowaniu sprawdza się zgodność.
+Otwórz: app/Http/Controllers/AuthController.php -> login() -> Auth::attempt($data).
+Nie porównujemy jawnego hasła z bazą ręcznie.
+Otwórz: config/auth.php -> guards.web (sesja), providers.users (model User).
+Algorytm hashujący można skonfigurować przez HASH_DRIVER; .env.example używa bcrypt.
+APP_KEY służy innym mechanizmom szyfrowania/podpisów, nie do odwracania haseł.
+
+8. „GDZIE OBSŁUGUJESZ LOGOWANIE I WYLOGOWANIE?”
+Otwórz: app/Http/Controllers/AuthController.php -> login() i logout().
+Znajdź: Auth::attempt(), session()->regenerate(), Auth::logout(), invalidate().
+Wyjaśnienie: po udanym logowaniu zmieniamy identyfikator sesji;
+wylogowanie unieważnia sesję i regeneruje token CSRF.
+Widok: resources/views/auth/login.blade.php.
+Trasy logowania mają throttle:10,1 — ograniczenie liczby żądań.
+
+9. „GDZIE SPRAWDZASZ UPRAWNIENIA?”
+Otwórz: app/Http/Middleware/RequireRole.php -> handle().
+Znajdź: abort_unless(... in_array(...), 403).
+Otwórz: routes/web.php -> middleware('role:admin,moderator') i 'role:admin'.
+Otwórz: bootstrap/app.php -> alias(['role' => RequireRole::class]).
+Wyjaśnienie: uprawnienia są sprawdzane na serwerze przed uruchomieniem kontrolera.
+Ukrycie linku w menu samo w sobie nie stanowi zabezpieczenia.
+Różne ekrany: app/Http/Controllers/OrderController.php -> dashboard() -> match.
+Klient: account; moderator: admin.products.index; administrator: admin.users.index.
+
+10. „GDZIE JEST CRUD UŻYTKOWNIKÓW?”
+Otwórz: app/Http/Controllers/AdminUserController.php.
+index() — lista; show() — pojedynczy użytkownik.
+create()/store() — formularz i zapis; edit()/update() — formularz i zmiana.
+destroy() — usunięcie; data() — wspólna walidacja.
+Widoki: resources/views/admin/users/index.blade.php, show.blade.php, form.blade.php.
+Znajdź: User::create(), $user->fill($data)->save(), $user->delete().
+Wyjaśnienie: ostatni administrator i usunięcie własnego konta admina są chronione.
+Zmiana e-maila ustawia email_verified_at=null i wymaga ponownej aktywacji.
+
+11. „GDZIE WALIDUJESZ DANE I UŻYWASZ REGEX?”
+Otwórz: AuthController.php -> register() -> $request->validate().
+required — pole wymagane; email — format e-maila; unique — brak duplikatu;
+min/max — długość; confirmed — zgodność z password_confirmation.
+Regex hasła: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/s.
+Otwórz: OrderController.php -> store() -> postcode: /^[0-9]{2}-[0-9]{3}$/.
+Otwórz: AdminProductController.php -> data() -> sku: /^[A-Z0-9-]+$/.
+Wyjaśnienie: pierwsza reguła wymaga małej/wielkiej litery i cyfry,
+druga formatu 00-000, trzecia wielkich liter/cyfr/myślników.
+Tłumaczenia błędów: lang/pl/validation.php.
+Wyświetlanie błędów: resources/views/layouts/app.blade.php -> $errors->any().
+Język: .env APP_LOCALE=pl -> config/app.php 'locale'.
+HTML required wspomaga użytkownika; zabezpieczeniem jest walidacja PHP.
+
+12. „GDZIE JEST KOSZYK W SESJI?”
+Otwórz: app/Http/Controllers/CartController.php -> add()/update()/destroy().
+Znajdź: session()->get('cart', []) i session()->put('cart', $cart).
+Wyjaśnienie: koszyk przechowuje identyfikatory produktów oraz liczbę sztuk.
+Otwórz: app/Services/Cart.php -> rows()/total().
+Znajdź: Product::...whereIn(...), subtotal i array_sum().
+Wyjaśnienie: aktualne ceny odczytujemy z bazy, nie z formularza klienta.
+Widok: resources/views/cart.blade.php.
+Konfiguracja: .env SESSION_DRIVER=database -> config/session.php 'driver'.
+Sesja jest zapisana w tabeli sessions; przeglądarka ma ciasteczko identyfikujące ją.
+To nadal koszyk w sesji, mimo że dane sesji przechowujemy w MariaDB.
+
+13. „GDZIE DODAJESZ/USUWASZ PRODUKTY?”
+Otwórz: app/Http/Controllers/AdminProductController.php.
+store() -> Product::create(); update() -> $product->update().
+destroy() -> $product->update(['active' => false]).
+Otwórz: CatalogController.php -> index() -> where('active', true).
+Wyjaśnienie: produkt jest wycofywany z oferty, nie fizycznie usuwany z bazy.
+Historia zostaje, produkt można przywrócić. Powiedz to jasno nauczycielowi.
+Widoki: resources/views/admin/products/index.blade.php i form.blade.php.
+Uprawnienia: grupa role:admin,moderator w routes/web.php.
+Ceny w formularzu są w złotych, w bazie w całkowitych groszach.
+
+14. „GDZIE ZAPISUJESZ ZAMÓWIENIE?”
+Otwórz: app/Http/Controllers/OrderController.php -> checkout() i store().
+Znajdź: validate(), checkout_token, DB::transaction(), lockForUpdate(),
+Order::create(), $order->items()->create(), decrement('stock', $quantity).
+Wyjaśnienie: serwer sprawdza koszyk i stan magazynowy, liczy ceny z bazy,
+zapisuje zamówienie i pozycje, zmniejsza stan. Błąd wycofuje transakcję.
+Blokady produktów chronią przed jednoczesnym zakupem tych samych ostatnich sztuk.
+Token formularza i ograniczenie sesji block() chronią przed powtórnym zapisem.
+Nazwy/ceny są kopiowane do order_items, więc późniejsza edycja produktu
+nie zmienia historii zamówienia. Na końcu koszyk jest czyszczony.
+Widok formularza: resources/views/checkout.blade.php.
+Lista/szczegóły: resources/views/orders/index.blade.php i show.blade.php.
+OrderController::show() sprawdza właściciela lub rolę admin/moderator.
+Statusy: app/Models/Order.php STATUSES; AdminOrderController::update() — kolejne etapy.
+
+15. „GDZIE JEST OCHRONA PRZED SQL INJECTION?”
+Otwórz: app/Http/Controllers/CatalogController.php -> index().
+Znajdź: where('name', 'like', '%'.$filters['q'].'%') oraz match dla sortowania.
+Wyjaśnienie: Eloquent przekazuje wartość wyszukiwania jako parametr zapytania.
+Sklejanie znaków % we WARTOŚCI parametru nie skleja jej z treścią SQL.
+Nazwy kolumn nie mogą pochodzić dowolnie od użytkownika: wybieramy je z listy match,
+a sort wcześniej walidujemy regułą in:new,price_asc,price_desc,name.
+Login: Auth::attempt(), zapis: metody Eloquent, bez ręcznego SQL z danych formularza.
+Test: tests/Feature/ShopTest.php -> test_html_is_escaped_and_search_injection_does_not_change_database
+oraz test_catalog_filter_sort_and_brand_configuration.
+To inne zabezpieczenie niż CSRF lub ucieczka HTML — nie mieszaj tych pojęć.
+
+16. „GDZIE JEST CSRF I OCHRONA PRZED XSS?”
+CSRF: resources/views/auth/register.blade.php -> @csrf; tak samo pozostałe formularze.
+Trasy web Laravel mają middleware sprawdzający token. Brak/poprawność tokenu
+jest testowana w ShopTest::test_posts_require_csrf().
+Formularze PATCH/DELETE używają @method(...) wraz z POST i @csrf.
+XSS: w widokach {{ ... }} ucieka HTML, np. imię i opis produktu.
+Otwórz: resources/views/catalog/show.blade.php i layouts/app.blade.php.
+CSRF chroni przed obcym żądaniem, XSS przed wykonaniem wstrzykniętego kodu w stronie.
+
+17. „GDZIE KONFIGURUJESZ POCZTĘ I AKTYWACJĘ?”
+Konfiguracja komputera: .env -> MAIL_MAILER=smtp, MAIL_HOST=127.0.0.1, MAIL_PORT=1025.
+Plik konfiguracji Laravel: config/mail.php -> default i mailers.smtp.
+Nadawca: MAIL_FROM_ADDRESS/MAIL_FROM_NAME; adres sklepu w linku: APP_URL.
+Otwórz: app/Models/User.php -> implements MustVerifyEmail, email_verified_at.
+Otwórz: app/Services/AccountMail.php -> verify() -> sendEmailVerificationNotification().
+Otwórz: app/Http/Controllers/VerificationController.php -> notice()/verify()/send().
+verify() używa EmailVerificationRequest i fulfill(), zapisując potwierdzenie.
+Otwórz: routes/web.php -> verification.verify (signed) i grupa verified.
+Wyjaśnienie: podpis chroni link przed zmianą, verified blokuje nieaktywne konto;
+żądanie sprawdza też tożsamość zalogowanego użytkownika względem linku.
+Treść wiadomości: app/Providers/AppServiceProvider.php -> VerifyEmail::toMailUsing().
+Widok oczekiwania: resources/views/auth/verify-email.blade.php.
+Lokalny serwer: tools/Start-Mailpit.ps1 — SMTP 1025, skrzynka WWW 8025.
+Ważność linku generuje Laravel VerifyEmail, domyślnie 60 minut; nie jest to
+expire z config/auth.php, które dotyczy RESETU HASŁA.
+Mailpit odbiera lokalną pocztę; wysyłka do zewnętrznej skrzynki wymaga własnego SMTP.
+
+18. „GDZIE JEST RESET HASŁA?”
+Otwórz: app/Http/Controllers/PasswordController.php -> email() i update().
+Znajdź: Password::sendResetLink(), Password::reset(), Hash::make().
+Wyjaśnienie: broker Laravel tworzy i sprawdza jednorazowy token;
+po zmianie usuwamy stare sesje w bazie i zmieniamy remember_token.
+Otwórz: config/auth.php -> passwords.users -> expire=60 (minuty), throttle=60 (sekundy).
+Tokeny: tabela password_reset_tokens (w bazie hash tokenu, nie jawny token).
+Treść wiadomości: AppServiceProvider.php -> ResetPassword::toMailUsing().
+Widoki: resources/views/auth/forgot-password.blade.php oraz reset-password.blade.php.
+Ten mechanizm jest dodatkiem; nie zastępuje aktywacji e-maila.
+
+19. „GDZIE ZMIENIAM NAZWĘ SKLEPU?”
+Otwórz: .env -> APP_NAME; config/app.php -> 'name' => env('APP_NAME', ...).
+Otwórz: resources/views/layouts/app.blade.php -> config('app.name').
+Tak samo nazwę odczytują wiadomości w AppServiceProvider.
+Po zmianie: php artisan config:clear, odśwież stronę.
+Dla nowych pobrań zmień też .env.example; nie trzeba zmieniać tabel ani folderu.
+
+20. „GDZIE JEST API I TESTY?”
+API: app/Http/Controllers/CatalogController.php -> euro() -> Http::timeout(8).
+Widok: resources/views/catalog/euro.blade.php. Pobieramy kurs EUR z API NBP;
+brak Internetu pokazuje komunikat, bez blokowania zakupów w PLN.
+Testy: tests/Feature/ShopTest.php — funkcje sklepu i przypadki błędne.
+tests/Feature/AccountSecurityTest.php — aktywacja, podpis, reset, wygasanie, sesje.
+Konfiguracja testów: phpunit.xml — SQLite :memory:, osobno od domowej MariaDB.
+Uruchomienie: php artisan test (aktualnie 29 testów, 210 asercji).
+Wersje bibliotek: composer.json i composer.lock; na drugim komputerze composer install.
+
+ĆWICZENIE PRZED OBRONĄ
+Wybierz wymaganie, znajdź plik przez Ctrl+P, metodę przez Ctrl+F.
+Wyjaśnij wejście (adres/formularz), sprawdzenie danych/uprawnień, zapis lub odczyt
+z modelu i wynik w widoku. Następnie pokaż tę samą funkcję w przeglądarce.
+Nie trzeba uczyć się numerów linii; trzeba rozumieć przepływ danych.
