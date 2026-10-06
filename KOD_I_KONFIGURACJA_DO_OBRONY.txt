@@ -79,7 +79,9 @@ Hasła nie można odczytać z tego hasha. Przy logowaniu sprawdza się zgodnoś�
 Otwórz: app/Http/Controllers/AuthController.php -> login() -> Auth::attempt($data).
 Nie porównujemy jawnego hasła z bazą ręcznie.
 Otwórz: config/auth.php -> guards.web (sesja), providers.users (model User).
-Algorytm hashujący można skonfigurować przez HASH_DRIVER; .env.example używa bcrypt.
+Algorytm hashujący można skonfigurować przez HASH_DRIVER; bez tej zmiennej Laravel
+domyślnie używa bcrypt. W tym projekcie nie ma własnego config/hashing.php;
+domyślna konfiguracja jest w vendor/laravel/framework/config/hashing.php.
 APP_KEY służy innym mechanizmom szyfrowania/podpisów, nie do odwracania haseł.
 
 8. „GDZIE OBSŁUGUJESZ LOGOWANIE I WYLOGOWANIE?”
@@ -220,7 +222,7 @@ Po zmianie: php artisan config:clear, odśwież stronę.
 Dla nowych pobrań zmień też .env.example; nie trzeba zmieniać tabel ani folderu.
 
 20. „GDZIE JEST API I TESTY?”
-API: app/Http/Controllers/CatalogController.php -> euro() -> Http::timeout(8).
+API: app/Http/Controllers/CatalogController.php -> euro() -> timeout(8).
 Widok: resources/views/catalog/euro.blade.php. Pobieramy kurs EUR z API NBP;
 brak Internetu pokazuje komunikat, bez blokowania zakupów w PLN.
 Testy: tests/Feature/ShopTest.php — funkcje sklepu i przypadki błędne.
