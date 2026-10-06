@@ -2,7 +2,9 @@ SCENARIUSZ PREZENTACJI PROJEKTU ZALICZENIOWEGO
 
 1. Pokaż katalog: kategorie, wyszukiwarkę, cenę i sortowanie.
 2. Zarejestruj nowego klienta. Wyjaśnij, że w bazie jest hash hasła, nie jawne hasło.
-3. Zaloguj się. Pokaż ekran klienta i puste/własne zamówienia.
+3. Zaloguj się. Pokaż ekran wymagający aktywacji. Otwórz http://127.0.0.1:8025,
+   znajdź wiadomość na nowy adres i kliknij Aktywuj konto w tym samym profilu przeglądarki.
+   Pokaż aktywne konto klienta i puste/własne zamówienia.
 4. Dodaj 2 produkty. Zmień ilość, usuń jeden — koszyk korzysta z sesji.
 5. Złóż zamówienie: dane dostawy, kod np. 00-001. Pokaż zapisane pozycje i kwotę.
 6. Spróbuj otworzyć /panel/users jako klient — dostęp zostanie zablokowany.
@@ -40,4 +42,11 @@ Pozycje zamówienia przechowują historyczną nazwę i cenę.
 
 Do samodzielnego przećwiczenia: wyjaśnij drogę żądania od trasy przez kontroler
 i model do widoku. Zmień opis produktu w panelu i odnajdź odpowiednią metodę w kodzie.
-Aktywacja konta przez e-mail: cel kolejnego etapu, jeszcze nie jest wdrożona.
+11. Wyloguj się. http://127.0.0.1:8002/zapomniane-haslo — wpisz adres nowego konta.
+    W Mailpit otwórz wiadomość Zmiana hasła -> Ustaw nowe hasło.
+    Ustaw inne poprawne hasło, zaloguj się nim. Stare hasło i użyty link nie działają.
+    Szczegóły: EMAIL_INSTRUKCJA.txt.
+
+VerificationController + User implements MustVerifyEmail — aktywacja przez podpisany link.
+PasswordController — broker haseł, jednorazowy token, hash i unieważnianie sesji.
+AppServiceProvider — polskie wiadomości, nazwa marki z APP_NAME.

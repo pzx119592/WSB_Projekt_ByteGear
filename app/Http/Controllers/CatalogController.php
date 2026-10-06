@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -61,7 +62,7 @@ class CatalogController extends Controller
             }
 
             return view('catalog.euro', ['product' => $product, 'rate' => $rate, 'euro' => $product->price_grosze / 100 / $mid]);
-        } catch (ConnectionException|\Illuminate\Http\Client\RequestException|\RuntimeException $exception) {
+        } catch (ConnectionException|RequestException|\RuntimeException $exception) {
             report($exception);
 
             return view('catalog.euro', ['product' => $product, 'error' => 'Kurs EUR jest chwilowo niedostępny. Cena i zamówienia w PLN działają normalnie.']);

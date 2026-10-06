@@ -17,6 +17,7 @@ $env:Path = "C:\xampp\php;" + $env:Path
 composer install
 php artisan key:generate
 php artisan migrate --seed
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\Start-Mailpit.ps1
 php artisan serve --host=127.0.0.1 --port=8002
 ```
 
@@ -65,7 +66,24 @@ Dodatkowo: polska walidacja, regex dla SKU, kodu pocztowego i hasła, CSRF,
 uprawnienia na serwerze, zapytania parametryzowane i prezentacja ceny EUR z API NBP.
 API nie jest potrzebne do złożenia zamówienia w PLN. Obrazy i CSS są lokalne.
 
-**Aktywacja konta e-mailem jest zaplanowana na późniejszy etap, zgodnie z ustaleniem.**
+## Aktywacja i odzyskiwanie hasła
+
+Nowe konta wymagają potwierdzenia adresu przed korzystaniem z panelu i składaniem zamówień.
+Link aktywacyjny ma podpis i ważność 60 minut. Można ponowić wysyłkę.
+Zmiana adresu przez administratora wymaga ponownej aktywacji.
+Trzy konta demonstracyjne z seedera są już aktywne.
+
+Na stronie logowania jest „Nie pamiętam hasła”. Link resetu działa przez 60 minut,
+tylko raz; zmiana hasła unieważnia wcześniejsze sesje. Odpowiedź nie ujawnia,
+czy wskazany adres znajduje się w bazie.
+
+Lokalne wiadomości odbiera [Mailpit](https://mailpit.axllent.org/) — **http://127.0.0.1:8025**.
+Uruchom `powershell -NoProfile -ExecutionPolicy Bypass -File tools\Start-Mailpit.ps1`.
+Skrypt pobiera oficjalny Mailpit 1.31.4 dla Windows x64 i sprawdza SHA256.
+Zostaje zainstalowany poza repozytorium w `C:\xampp\tools\mailpit`.
+Skrzynka jest dostępna tylko lokalnie. Wiadomości nie trafiają do rzeczywistych skrzynek.
+Do wysyłki przez Internet można później podstawić własny serwer SMTP w `.env`.
+Szczegóły i gotowy scenariusz: [EMAIL_INSTRUKCJA.txt](EMAIL_INSTRUKCJA.txt).
 
 ## Testy i inspiracje
 

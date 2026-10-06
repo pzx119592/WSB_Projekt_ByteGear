@@ -12,7 +12,11 @@ class ShopSeeder extends Seeder
     public function run(): void
     {
         foreach (['admin' => 'Administrator', 'moderator' => 'Moderator', 'customer' => 'Klient Demo'] as $role => $name) {
-            User::firstOrCreate(['email' => $role.'@example.test'], ['name' => $name, 'role' => $role, 'password' => 'DemoSklep123!']);
+            $demo = User::firstOrCreate(['email' => $role.'@example.test'], ['name' => $name, 'role' => $role, 'password' => 'DemoSklep123!']);
+            // Tylko trzy konta demonstracyjne omijają aktywację; nowe konta wymagają e-maila.
+            if (! $demo->hasVerifiedEmail()) {
+                $demo->markEmailAsVerified();
+            }
         }
         $groups = [
             'keyboard' => ['Klawiatury', [['Keyline K75', 24990], ['Keyline Silent', 15990], ['Keyline Pro TKL', 34990]]],

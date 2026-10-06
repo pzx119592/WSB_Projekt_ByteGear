@@ -15,7 +15,8 @@
 | Wyrażenia regularne | Hasło, kod pocztowy i SKU |
 | Ochrona przed SQL Injection | Eloquent z parametrami, lista dozwolonych pól sortowania |
 | API | Orientacyjna cena EUR z API NBP |
-| Aktywacja przez e-mail | **Jeszcze nie wdrożona — ustalony kolejny etap** |
+| Aktywacja przez e-mail | MustVerifyEmail, VerificationController, signed i verified middleware; lokalny SMTP Mailpit |
+| Reset zapomnianego hasła | PasswordController, broker Laravel, jednorazowy token 60 minut, unieważnienie sesji |
 
 Usuwanie produktów oznacza ich wycofanie z katalogu, aby zachować historię zamówień.
 Zamówienia są demonstracyjne; nie korzystają z bramki płatniczej ani zewnętrznego dostawcy.

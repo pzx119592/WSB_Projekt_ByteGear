@@ -1,0 +1,69 @@
+AKTYWACJA KONTA I RESET HASŁA — DOM / KOMPUTER UCZELNIANY
+
+1. Sklep i baza muszą być przygotowane według INSTRUKCJA.txt.
+   W PowerShell w C:\xampp\htdocs\bytegear uruchom:
+   powershell -NoProfile -ExecutionPolicy Bypass -File tools\Start-Mailpit.ps1
+   Ten parametr dotyczy tylko uruchomienia tego skryptu, nie zmienia polityki systemu.
+   Pierwsze uruchomienie pobierze oficjalny Mailpit dla Windows x64 i sprawdzi SHA256.
+   Kolejne uruchomienia nie potrzebują Internetu ani uprawnień administratora,
+   jeśli można zapisywać do C:\xampp\tools\mailpit.
+   Skrzynka: http://127.0.0.1:8025
+   Serwer SMTP: 127.0.0.1, port 1025.
+
+2. W .env ustaw (nowe .env.example zawiera już te wartości):
+   APP_URL=http://127.0.0.1:8002
+   MAIL_MAILER=smtp
+   MAIL_SCHEME=null
+   MAIL_HOST=127.0.0.1
+   MAIL_PORT=1025
+   MAIL_USERNAME=null
+   MAIL_PASSWORD=null
+   MAIL_FROM_ADDRESS="sklep@bytegear.test"
+   MAIL_FROM_NAME="${APP_NAME}"
+   Następnie php artisan config:clear.
+   Skrzynka i serwer sklepu muszą być uruchomione równocześnie.
+
+3. AKTYWACJA — ADRESY DO POKAZANIA
+   http://127.0.0.1:8002/rejestracja — zarejestruj np. pokaz@example.test.
+   Użyj własnego hasła z małą i wielką literą oraz cyfrą, minimum 8 znaków.
+   http://127.0.0.1:8002/logowanie — zaloguj się na nowe konto.
+   http://127.0.0.1:8002/potwierdz-email — konto czeka na potwierdzenie.
+   http://127.0.0.1:8025 — znajdź wiadomość dla pokaz@example.test.
+   Otwórz jej treść i kliknij Aktywuj konto w przeglądarce, w której jesteś zalogowany.
+   http://127.0.0.1:8002/konto — po aktywacji panel działa.
+   Link jest ważny 60 minut; ponowna wysyłka dostępna na stronie aktywacji.
+   Konta admin/moderator/customer@example.test z seedera są aktywne od początku.
+   Nowe konta utworzone przez administratora także otrzymują wiadomość.
+   Zmiana e-maila konta wymaga ponownego potwierdzenia.
+
+4. RESET HASŁA — ADRESY DO POKAZANIA
+   Wyloguj się (reset przeznaczony jest dla osób niezalogowanych).
+   http://127.0.0.1:8002/zapomniane-haslo — podaj adres nowego konta.
+   http://127.0.0.1:8025 — otwórz wiadomość Zmiana hasła.
+   Kliknij Ustaw nowe hasło. Nie wpisuj adresu resetu ręcznie: zawiera token.
+   Wpisz inne poprawne hasło dwukrotnie i zaloguj się nowym hasłem.
+   Stare hasło nie działa. Link resetu działa tylko raz przez 60 minut.
+   Poprzednie sesje zalogowanego użytkownika są unieważniane.
+   Reset nie aktywuje niepotwierdzonego konta.
+
+5. CO WARTO WIEDZIEĆ
+   Mailpit to lokalna skrzynka testowa. Dowolny adres trafia do tej skrzynki,
+   także wymyślony @example.test. Nic nie trafia do rzeczywistej poczty.
+   Wiadomości zostają w C:\xampp\tools\mailpit\mailpit.db i nie trafiają na GitHub.
+   Rzeczywiste e-maile wymagają danych własnego serwera SMTP w prywatnym .env
+   (host, port, scheme, użytkownik, hasło i nadawca zgodne z dostawcą).
+   Nie wysyłaj haseł SMTP ani .env do publicznego repozytorium.
+   Usuwaj testowe wiadomości w Mailpit, gdy nie są potrzebne.
+   Proces mailpit.exe można zatrzymać w Menedżerze zadań po zakończeniu ćwiczeń.
+
+6. PROBLEMY
+   Brak wiadomości: włącz Mailpit, sprawdź konfigurację i config:clear,
+   potem ponów wysyłkę. Reset ogranicza kolejne wiadomości do jednego na minutę.
+   Sprawdź storage/logs/laravel.log przy problemie z SMTP.
+   Link 403: wygasł, został zmieniony, dotyczy innego konta lub adresu serwera.
+   Zaloguj się na właściwe konto i poproś o nowy link aktywacyjny.
+   Po zmianie portu zmień APP_URL i wyślij nowy link.
+   Porty 1025/8025 zajęte: ustal, który program ich używa; nie zatrzymuj go w ciemno.
+   Po pobraniu aktualizacji na istniejącym komputerze zachowaj .env i bazę.
+   Dla trzech starszych kont demo: php artisan db:seed --class=ShopSeeder
+   Nie używaj migrate:fresh — usunąłby własne dane.

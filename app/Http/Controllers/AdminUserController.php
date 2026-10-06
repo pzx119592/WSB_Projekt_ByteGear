@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\AccountMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -32,9 +33,10 @@ class AdminUserController extends Controller
 
     public function store(Request $request)
     {
-        User::create($this->data($request));
+        $user = User::create($this->data($request));
+        $sent = app(AccountMail::class)->verify($user);
 
-        return redirect()->route('admin.users.index')->with('status', 'Użytkownik dodany.');
+        return redirect()->route('admin.users.index')->with('status', $sent ? 'Użytkownik dodany. Wysłano link aktywacyjny.' : 'Użytkownik dodany. Może ponowić aktywację po zalogowaniu.');
     }
 
     public function update(Request $request, User $user)
@@ -46,8 +48,14 @@ class AdminUserController extends Controller
             if ($user->role === 'admin' && $data['role'] !== 'admin' && $admins->count() <= 1) {
                 throw ValidationException::withMessages(['role' => 'Nie można odebrać uprawnień ostatniemu administratorowi.']);
             }
-            $user->update($data);
+            if ($user->email !== $data['email']) {
+                $user->email_verified_at = null;
+            }
+            $user->fill($data)->save();
         });
+        if (! $user->hasVerifiedEmail()) {
+            app(AccountMail::class)->verify($user);
+        }
 
         return redirect()->route('admin.users.index')->with('status', 'Użytkownik zapisany.');
     }
@@ -80,6 +88,6 @@ class AdminUserController extends Controller
             unset($data['password']);
         }
 
-return $data;
+        return $data;
     }
 }

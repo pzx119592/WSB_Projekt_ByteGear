@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\AccountMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,9 +26,12 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:8', 'max:72', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/s'],
         ]);
         $data['role'] = 'customer';
-        User::create($data);
+        $user = User::create($data);
+        $sent = app(AccountMail::class)->verify($user);
 
-        return redirect()->route('login')->with('status', 'Konto utworzone. Możesz się zalogować.');
+        return redirect()->route('login')->with('status', $sent
+            ? 'Konto utworzone. Zaloguj się i potwierdź adres e-mail, korzystając z wysłanej wiadomości.'
+            : 'Konto utworzone. Zaloguj się, aby ponowić wysyłanie wiadomości aktywacyjnej.');
     }
 
     public function login(Request $request)

@@ -238,7 +238,7 @@ class ShopTest extends TestCase
         $product = Product::first();
         $token = (string) Str::uuid();
         $this->actingAs($this->user())->withSession(['cart' => [$product->id => 1], 'checkout_token' => $token]);
-        $this->post('/zamowienie',$this->delivery($token))->assertRedirect();
+        $this->post('/zamowienie', $this->delivery($token))->assertRedirect();
 
         return Order::latest('id')->firstOrFail();
     }

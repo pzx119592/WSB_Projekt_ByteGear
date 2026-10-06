@@ -7,6 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [CatalogController::class, 'index'])->name('catalog');
@@ -21,9 +23,18 @@ Route::middleware('guest')->group(function () {
     Route::post('/logowanie', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('login.store');
     Route::get('/rejestracja', [AuthController::class, 'registerForm'])->name('register');
     Route::post('/rejestracja', [AuthController::class, 'register'])->middleware('throttle:10,1')->name('register.store');
+    Route::get('/zapomniane-haslo', [PasswordController::class, 'request'])->name('password.request');
+    Route::post('/zapomniane-haslo', [PasswordController::class, 'email'])->middleware('throttle:5,1')->name('password.email');
+    Route::get('/nowe-haslo/{token}', [PasswordController::class, 'form'])->name('password.reset');
+    Route::post('/nowe-haslo', [PasswordController::class, 'update'])->middleware('throttle:10,1')->name('password.update');
 });
 Route::middleware('auth')->group(function () {
     Route::post('/wyloguj', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/potwierdz-email', [VerificationController::class, 'notice'])->name('verification.notice');
+    Route::get('/potwierdz-email/{id}/{hash}', [VerificationController::class, 'verify'])->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
+    Route::post('/wyslij-aktywacje', [VerificationController::class, 'send'])->middleware('throttle:3,1')->name('verification.send');
+});
+Route::middleware(['auth', 'auth.session', 'verified'])->group(function () {
     Route::get('/konto', [OrderController::class, 'dashboard'])->name('dashboard');
     Route::get('/zamowienie', [OrderController::class, 'checkout'])->name('checkout');
     Route::post('/zamowienie', [OrderController::class, 'store'])->name('checkout.store')->block(10, 10);

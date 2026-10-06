@@ -10,6 +10,7 @@
 </label>
 <button>Zaloguj się</button>
 </form>
+<p><a href="{{ route('password.request') }}">Nie pamiętam hasła</a></p>
 <p>Nie masz konta? <a href="{{ route('register') }}">Zarejestruj się</a>
 </p>
 </section>@endsection

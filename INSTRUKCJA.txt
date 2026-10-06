@@ -44,6 +44,7 @@ APP_NAME zmienia nazwę w całym sklepie. Możesz od razu wpisać własną nazw�
 php artisan key:generate
 php artisan config:clear
 php artisan migrate --seed
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\Start-Mailpit.ps1
 php artisan serve --host=127.0.0.1 --port=8002
 
 Terminal zostaje otwarty. Ctrl+C zatrzymuje serwer.
@@ -70,16 +71,21 @@ http://127.0.0.1:8002/panel/products — moderator/administrator, produkty.
 http://127.0.0.1:8002/panel/orders — moderator/administrator, wszystkie zamówienia.
 http://127.0.0.1:8002/panel/users — tylko administrator, użytkownicy.
 Na stronie produktu link do orientacyjnej ceny EUR pobiera kurs z NBP.
-Reszta sklepu działa offline po instalacji zależności. E-mail dodamy później.
+Reszta sklepu i lokalna poczta działają offline po instalacji zależności oraz Mailpit.
+Nowe konta wymagają aktywacji. Trzy konta demonstracyjne są już aktywne.
+Uruchom skrzynkę zgodnie z EMAIL_INSTRUKCJA.txt (instalacja za pierwszym razem potrzebuje Internetu).
 
 KOLEJNE URUCHOMIENIE
 Włącz MySQL. W PowerShell:
 cd C:\xampp\htdocs\bytegear
 $env:Path = "C:\xampp\php;" + $env:Path
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\Start-Mailpit.ps1
 php artisan serve --port=8002
 
 Dla phpMyAdmin włącz także Apache. Nie generuj ponownie APP_KEY i nie kopiuj .env.
-Jeśli port zajęty, wybierz inny --port i używaj go w przeglądarce.
+Jeśli port zajęty, wybierz inny --port i wpisz też ten adres w APP_URL w .env.
+Po zmianie wykonaj php artisan config:clear. Stare linki aktywacyjne mogą nie działać;
+wyślij nowy link. Używaj konsekwentnie 127.0.0.1, jak w APP_URL.
 Testy: php artisan test (w drugim terminalu, wymaga pdo_sqlite).
 
 ZMIANA NAZWY
