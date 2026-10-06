@@ -1,0 +1,111 @@
+PROJEKT ZALICZENIOWY — WYMAGANIA I GOTOWE ADRESY DO POKAZANIA
+
+PRZYGOTOWANIE
+Uruchom MariaDB w XAMPP, serwer sklepu na 8002 oraz Mailpit według INSTRUKCJA.txt.
+Konta demo (hasło DemoSklep123!):
+customer@example.test — klient
+moderator@example.test — moderator
+admin@example.test — administrator
+Przy zmianie roli najpierw wyloguj się.
+
+1. HTML5, CSS3, PHP 8.x, MariaDB, Laravel > 9
+http://127.0.0.1:8002/ — sklep.
+resources/views/layouts/app.blade.php — HTML5 i szablon Blade.
+public/css/shop.css — CSS.
+composer.json — PHP ^8.2, Laravel ^12.0.
+Terminal: php --version oraz php artisan --version.
+http://localhost/phpmyadmin — baza bytegear, tabele users/products/orders/order_items.
+W .env pokaż tylko DB_CONNECTION=mysql i DB_DATABASE=bytegear, bez sekretów.
+Laravel nazywa sterownik MariaDB także mysql; lokalnie działa MariaDB z XAMPP.
+
+2. REJESTRACJA I LOGOWANIE OPARTE O BAZĘ
+http://127.0.0.1:8002/rejestracja — dodaj nowe konto klienta.
+http://127.0.0.1:8002/logowanie — zaloguj się, następnie aktywuj nowe konto.
+phpMyAdmin -> bytegear -> users — nowy rekord i hash w kolumnie password.
+Kod: AuthController::register/login, app/Models/User.php cast password => hashed.
+Hasło jest hashowane, nie zapisywane jawnie ani szyfrowane odwracalnie.
+
+3. DODAWANIE UŻYTKOWNIKÓW PRZEZ ADMINISTRATORA
+Zaloguj się jako admin@example.test.
+http://127.0.0.1:8002/panel/users/create — utwórz konto.
+Kod: AdminUserController::store, ten sam cast hasła w User.
+Nowo utworzone konto dostaje link aktywacyjny.
+
+4. CO NAJMNIEJ DWA POZIOMY UPRAWNIEŃ I RÓŻNE STRONY
+http://127.0.0.1:8002/konto — klient widzi własny panel,
+moderator zostaje przekierowany do produktów, administrator do użytkowników.
+http://127.0.0.1:8002/panel/users — klient i moderator nie mają dostępu (403).
+Kod: OrderController::dashboard, RequireRole, grupy tras w routes/web.php.
+Role: customer, moderator, admin.
+
+5. PEŁNY CRUD UŻYTKOWNIKÓW
+Zaloguj się jako administrator.
+http://127.0.0.1:8002/panel/users — lista wszystkich użytkowników (z paginacją).
+Kliknij szczegóły konta — pojedynczy użytkownik.
+Dodaj konto testowe, edytuj imię lub rolę, a następnie usuń to konto.
+Nie usuwaj kont demo potrzebnych do pokazu.
+Kod: AdminUserController::index/show/create/store/edit/update/destroy.
+Własne konto administratora i ostatni administrator są chronieni.
+
+6. WALIDACJA FORMULARZY
+http://127.0.0.1:8002/rejestracja — pokaż puste pole, błędny e-mail, słabe hasło.
+http://127.0.0.1:8002/zamowienie — błędny kod pocztowy, np. 00001.
+http://127.0.0.1:8002/panel/products/create — błędny SKU, np. kod ze spacją.
+Kod: validate() w AuthController, OrderController, AdminProductController.
+Przeglądarka sprawdza wymagane pola; PHP dodatkowo waliduje dane na serwerze.
+
+7. KOSZYK W SESJI
+http://127.0.0.1:8002/ — dodaj produkt.
+http://127.0.0.1:8002/koszyk — zmień ilość, usuń pozycję, odśwież stronę.
+Kod: CartController oraz app/Services/Cart.php, klucz cart w sesji.
+
+8. DODAWANIE I USUWANIE PRODUKTÓW
+Zaloguj się jako moderator lub administrator.
+http://127.0.0.1:8002/panel/products — zarządzanie produktami.
+http://127.0.0.1:8002/panel/products/create — dodaj produkt z nowym SKU.
+Wycofaj go i sprawdź, że zniknął z oferty sklepu.
+Kod: AdminProductController::store/destroy.
+Ważne: usuwanie z oferty jest realizowane przez active=false (archiwizacja).
+Rekord pozostaje w bazie dla historii i przywrócenia. Jeżeli prowadzący wymaga
+fizycznego DELETE rekordu, tę interpretację trzeba z nim uzgodnić.
+
+9. ZAMAWIANIE PRZEZ KLIENTA
+Zaloguj się jako customer@example.test lub aktywowany nowy klient.
+http://127.0.0.1:8002/koszyk — dodaj produkt, przejdź do zamówienia.
+http://127.0.0.1:8002/zamowienie — wpisz dane dostawy i zatwierdź.
+http://127.0.0.1:8002/zamowienia — historia i szczegóły własnego zamówienia.
+http://127.0.0.1:8002/panel/orders — moderator/admin widzi zamówienie.
+Kod: OrderController::store, Order, OrderItem, transakcja i zmniejszenie zapasu.
+Zamówienia są demonstracyjne; płatności internetowe nie były wymagane.
+
+10. AKTYWACJA KONTA PRZEZ POCZTĘ ELEKTRONICZNĄ
+Zarejestruj nowe konto (konta demo są już aktywne).
+http://127.0.0.1:8002/potwierdz-email — blokada panelu przed aktywacją.
+http://127.0.0.1:8025 — odbierz wiadomość w Mailpit i kliknij Aktywuj konto.
+http://127.0.0.1:8002/konto — po aktywacji panel działa.
+Kod: User implements MustVerifyEmail, VerificationController, signed/verified.
+Mailpit odbiera prawdziwą wiadomość SMTP lokalnie. Nie wysyła jej do Gmaila/Outlooka.
+Jeżeli prowadzący oczekuje zewnętrznej skrzynki, trzeba skonfigurować własny SMTP.
+Dokładny scenariusz i konfiguracja: EMAIL_INSTRUKCJA.txt.
+
+11. WYRAŻENIA REGULARNE
+Hasło: co najmniej mała i wielka litera oraz cyfra — AuthController.
+Kod pocztowy: dokładnie 00-000 — OrderController.
+SKU: tylko wielkie litery, cyfry i myślnik — AdminProductController.
+Pokaż reguły regex:/.../ w metodach walidacji i błędny przykład w formularzu.
+
+12. OCHRONA PRZED SQL INJECTION
+Kod: CatalogController::index — Eloquent where() przekazuje wartości jako parametry.
+Sortowanie wybiera kolumnę z listy w kodzie, nie z dowolnego tekstu użytkownika.
+AuthController::login korzysta z Auth::attempt(), bez sklejania SQL z formularza.
+Testy: tests/Feature/ShopTest.php — wyszukiwanie i niedozwolone sortowanie.
+Terminal: php artisan test — obecnie 29 testów / 210 asercji.
+To wymaganie pokaż w kodzie; sam wygląd strony nie dowodzi ochrony SQL.
+
+13. SAMODZIELNOŚĆ, TERMIN I OBRONA
+Tych warunków nie potwierdza działająca aplikacja. Musisz oddać projekt w terminie,
+umieć wyjaśnić kod i przedstawić swój wkład zgodnie z zasadami prowadzącego.
+Projekt był przygotowywany z pomocą asystenta; nie oznaczaj go jako wykonanego
+bez pomocy, jeżeli tak nie było.
+
+Repozytorium: https://github.com/pzx119592/WSB_Projekt_ByteGear
