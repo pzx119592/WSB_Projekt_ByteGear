@@ -50,3 +50,14 @@ i model do widoku. Zmień opis produktu w panelu i odnajdź odpowiednią metodę
 VerificationController + User implements MustVerifyEmail — aktywacja przez podpisany link.
 PasswordController — broker haseł, jednorazowy token, hash i unieważnianie sesji.
 AppServiceProvider — polskie wiadomości, nazwa marki z APP_NAME.
+
+NOWE FUNKCJE DO POKAZANIA
+12. http://127.0.0.1:8002/profil — edycja danych i hasła. Zmiana e-maila wymaga
+    obecnego hasła i ponownej aktywacji. Pozostałe sesje po zmianie hasła są wylogowane.
+13. Moderator/admin -> /panel/products -> Edytuj -> Zdjęcie produktu.
+    Prześlij własne zdjęcie i pokaż efekt w katalogu; SVG i zbyt duże pliki są odrzucane.
+14. Po zakupie http://127.0.0.1:8025 — potwierdzenie numeru, pozycji i kwoty.
+15. Własne zamówienie Nowe -> Szczegóły -> Anuluj.
+    Pokaż status Anulowane, zachowanie historii i zwrot sztuk do magazynu.
+Katalog zawiera własne modele BG i dopasowane wizualizacje demonstracyjne.
+Szczegóły: NOWE_FUNKCJE_INSTRUKCJA.txt.

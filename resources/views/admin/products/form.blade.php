@@ -2,7 +2,7 @@
 @section('title','Produkt')
 @section('content')<div class="form-box wide">
 <h1>{{ $product->exists ? 'Edytuj produkt' : 'Dodaj produkt' }}</h1>
-<form method="POST" action="{{ $product->exists ? route('admin.products.update',$product) : route('admin.products.store') }}">@csrf @if($product->exists) @method('PUT') @endif<label>Nazwa<input name="name" value="{{ old('name',$product->name) }}" required>
+<form method="POST" enctype="multipart/form-data" action="{{ $product->exists ? route('admin.products.update',$product) : route('admin.products.store') }}">@csrf @if($product->exists) @method('PUT') @endif<label>Nazwa<input name="name" value="{{ old('name',$product->name) }}" required>
 </label>
 <label>Kategoria<select name="category_id">@foreach($categories as $category)<option value="{{ $category->id }}" @selected(old('category_id',$product->category_id) == $category->id)>{{ $category->name }}</option>@endforeach</select>
 </label>
@@ -16,6 +16,12 @@
 <label>Stan magazynowy<input type="number" name="stock" min="0" value="{{ old('stock',$product->stock) }}" required>
 </label>
 <input type="hidden" name="active" value="0">
+<div class="image-editor"><h2>Zdjęcie produktu</h2>
+@if($product->exists)<img class="image-preview" src="{{ asset($product->imagePath()) }}" alt="Obecne zdjęcie {{ $product->name }}">@endif
+<label>Nowe zdjęcie<input type="file" name="image" accept="image/jpeg,image/png,image/webp"></label>
+<p class="muted">JPG, PNG lub WebP, maks. 4 MB. Rozmiar od 160 × 160 do 4096 × 4096 px. Używaj własnych zdjęć lub materiałów, które możesz wykorzystać.</p>
+@if($product->image_path)<label class="check"><input type="checkbox" name="remove_image" value="1">Usuń przesłane zdjęcie i przywróć grafikę domyślną</label>@endif
+</div>
 <label class="check">
 <input type="checkbox" name="active" value="1" @checked(old('active',$product->active))> Aktywny w sklepie</label>
 <button>Zapisz produkt</button>

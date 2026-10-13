@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Services\Cart;
+use App\Services\OrderMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -58,7 +59,45 @@ class OrderController extends Controller
         }, 3);
         $request->session()->forget(['cart', 'checkout_token']);
 
-        return redirect()->route('orders.show', $order)->with('status', 'Zamówienie zostało złożone. Dziękujemy!');
+        $sent = app(OrderMail::class)->send($order);
+
+        return redirect()->route('orders.show', $order)->with('status', $sent
+            ? 'Zamówienie zostało złożone. Potwierdzenie wysłano e-mailem.'
+            : 'Zamówienie zostało złożone. Wysyłka e-maila nie powiodła się — możesz ją ponowić w szczegółach zamówienia.');
+    }
+
+    public function cancel(Request $request, Order $order)
+    {
+        abort_unless($order->user_id === $request->user()->id, 403);
+        $request->validate(['confirm_cancel' => 'required|accepted']);
+        DB::transaction(function () use ($order) {
+            $locked = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
+            if ($locked->status === 'cancelled') {
+                return;
+            }
+            if ($locked->status !== 'new') {
+                throw ValidationException::withMessages(['order' => 'Można anulować tylko zamówienie, którego realizacja jeszcze się nie rozpoczęła.']);
+            }
+            $items = $locked->items()->whereNotNull('product_id')->get()->groupBy('product_id');
+            $products = Product::whereIn('id', $items->keys())->orderBy('id')->lockForUpdate()->get();
+            foreach ($products as $product) {
+                $product->increment('stock', $items[$product->id]->sum('quantity'));
+            }
+            $locked->forceFill(['status' => 'cancelled', 'cancelled_at' => now()])->save();
+        }, 3);
+
+        return back()->with('status', 'Zamówienie anulowane. Produkty wróciły do magazynu.');
+    }
+
+    public function confirmation(Request $request, Order $order)
+    {
+        abort_unless($order->user_id === $request->user()->id, 403);
+        if ($order->status === 'cancelled') {
+            return back()->withErrors(['order' => 'Zamówienie zostało anulowane.']);
+        }
+        $sent = app(OrderMail::class)->send($order);
+
+        return back()->with('status', $sent ? 'Potwierdzenie zamówienia zostało wysłane.' : 'Nie udało się wysłać potwierdzenia. Spróbuj ponownie później.');
     }
 
     public function index(Request $request)

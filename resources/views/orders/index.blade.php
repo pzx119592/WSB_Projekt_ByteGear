@@ -19,7 +19,7 @@
 <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
 <td>{{ $order->name }}</td>
 <td>{{ number_format($order->total_grosze/100,2,',',' ') }} zł</td>
-<td>{{ \App\Models\Order::STATUSES[$order->status] }}</td>
+<td><span class="status status-{{ $order->status }}">{{ \App\Models\Order::STATUSES[$order->status] }}</span></td>
 <td>
 <a href="{{ route('orders.show',$order) }}">Szczegóły</a>
 </td>
@@ -27,4 +27,4 @@
 <td colspan="6">Brak zamówień.</td>
 </tr>@endforelse</tbody>
 </table>
-</div>{{ $orders->links('pagination::simple-default') }}@endsection
+</div>{{ $orders->links('pagination.simple') }}@endsection

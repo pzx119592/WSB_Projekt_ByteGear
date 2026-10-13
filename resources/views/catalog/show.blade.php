@@ -4,7 +4,7 @@
 <section class="product-detail">
 <div class="detail-image">
 <img src="{{ asset($product->imagePath()) }}" alt="Wizualizacja produktu: {{ $product->name }}">
-<small class="muted">Grafika poglądowa — wygląd rzeczywistego modelu może się różnić.</small>
+<small class="muted">Wizualizacja naszego modelu demonstracyjnego.</small>
 </div>
 <div>
 <span class="eyebrow">{{ $product->category->name }}</span>

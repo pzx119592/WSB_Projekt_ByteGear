@@ -10,5 +10,6 @@
 <button>Wyślij link ponownie</button>
 </form>
 <p><a href="{{ route('catalog') }}">Wróć do produktów</a></p>
+<p><a href="{{ route('profile.edit') }}">Popraw adres e-mail w profilu</a></p>
 </section>
 @endsection

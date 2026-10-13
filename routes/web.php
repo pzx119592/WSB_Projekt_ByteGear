@@ -8,12 +8,14 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [CatalogController::class, 'index'])->name('catalog');
 Route::get('/produkty/{product}', [CatalogController::class, 'show'])->name('products.show');
 Route::get('/produkty/{product}/euro', [CatalogController::class, 'euro'])->name('products.euro');
+Route::get('/produkty/{product}/zdjecie', [CatalogController::class, 'image'])->name('products.image');
 Route::get('/koszyk', [CartController::class, 'index'])->name('cart');
 Route::post('/koszyk/{product}', [CartController::class, 'add'])->name('cart.add')->block();
 Route::patch('/koszyk/{product}', [CartController::class, 'update'])->name('cart.update')->block();
@@ -29,6 +31,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/nowe-haslo', [PasswordController::class, 'update'])->middleware('throttle:10,1')->name('password.update');
 });
 Route::middleware('auth')->group(function () {
+    Route::get('/profil', [ProfileController::class, 'edit'])->middleware('auth.session')->name('profile.edit');
+    Route::patch('/profil', [ProfileController::class, 'update'])->middleware(['auth.session', 'throttle:10,1'])->name('profile.update');
+    Route::put('/profil/haslo', [ProfileController::class, 'password'])->middleware(['auth.session', 'throttle:5,1'])->name('profile.password');
     Route::post('/wyloguj', [AuthController::class, 'logout'])->name('logout');
     Route::get('/potwierdz-email', [VerificationController::class, 'notice'])->name('verification.notice');
     Route::get('/potwierdz-email/{id}/{hash}', [VerificationController::class, 'verify'])->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
@@ -40,6 +45,8 @@ Route::middleware(['auth', 'auth.session', 'verified'])->group(function () {
     Route::post('/zamowienie', [OrderController::class, 'store'])->name('checkout.store')->block(10, 10);
     Route::get('/zamowienia', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/zamowienia/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::patch('/zamowienia/{order}/anuluj', [OrderController::class, 'cancel'])->name('orders.cancel')->block(10, 10);
+    Route::post('/zamowienia/{order}/potwierdzenie', [OrderController::class, 'confirmation'])->middleware('throttle:3,1')->name('orders.confirmation')->block(10, 10);
     Route::prefix('panel')->name('admin.')->middleware('role:admin,moderator')->group(function () {
         Route::resource('products', AdminProductController::class)->except('show');
         Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');

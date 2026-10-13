@@ -17,6 +17,10 @@
 | API | Orientacyjna cena EUR z API NBP |
 | Aktywacja przez e-mail | MustVerifyEmail, VerificationController, signed i verified middleware; lokalny SMTP Mailpit |
 | Reset zapomnianego hasła | PasswordController, broker Laravel, jednorazowy token 60 minut, unieważnienie sesji |
+| Edycja profilu i hasła | ProfileController; zmiana e-maila wymaga hasła i ponownej aktywacji |
+| Własne zdjęcia produktów | AdminProductController + ProductImage; ograniczenia pliku, zapis bez EXIF |
+| Anulowanie nowego zamówienia | OrderController::cancel; właściciel, blokada rekordu, jednorazowy zwrot zapasu |
+| Potwierdzenie zamówienia e-mailem | OrderMail + OrderConfirmation; awaria SMTP nie cofa zakupu |
 
 Usuwanie produktów oznacza ich wycofanie z katalogu, aby zachować historię zamówień.
 Zamówienia są demonstracyjne; nie korzystają z bramki płatniczej ani zewnętrznego dostawcy.

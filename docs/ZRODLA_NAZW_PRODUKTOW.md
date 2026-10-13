@@ -1,5 +1,9 @@
 # Źródła nazw produktów
 
+To zapis wcześniejszego etapu. Aktualny katalog ma własne modele BG, wybrane
+przez użytkownika, aby dopasować nazwy i opisy do własnych wizualizacji.
+Poniższe rzeczywiste modele nie są już pozycjami bieżącego katalogu.
+
 Nazwy modeli sprawdzono w x-kom i Komputronik 13 października 2026.
 Katalog ma charakter edukacyjny: ceny i zapasy są przykładowe, zdjęcia to wygenerowane wizualizacje poglądowe, nie fotografie wskazanych modeli. Opisy są własnymi krótkimi podsumowaniami.
 

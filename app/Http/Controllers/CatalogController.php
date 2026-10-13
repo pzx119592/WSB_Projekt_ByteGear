@@ -8,9 +8,19 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class CatalogController extends Controller
 {
+    public function image(Product $product)
+    {
+        abort_unless($product->image_path && Storage::disk('local')->exists($product->image_path), 404);
+
+        return response()->file(Storage::disk('local')->path($product->image_path), [
+            'Content-Type' => 'image/jpeg', 'X-Content-Type-Options' => 'nosniff', 'Cache-Control' => 'public, max-age=0, must-revalidate',
+        ]);
+    }
+
     public function index(Request $request)
     {
         $filters = $request->validate([

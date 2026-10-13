@@ -28,4 +28,4 @@
 </form>@endif</td>
 </tr>@endforeach</tbody>
 </table>
-</div>{{ $products->links('pagination::simple-default') }}@endsection
+</div>{{ $products->links('pagination.simple') }}@endsection

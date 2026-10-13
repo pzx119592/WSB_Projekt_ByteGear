@@ -2,19 +2,22 @@ ZDJĘCIA PRODUKTÓW — LOKALNE WIZUALIZACJE DEMONSTRACYJNE
 
 18 modeli z katalogu ma osobne fotorealistyczne wizualizacje wygenerowane AI.
 Nie są to zdjęcia konkretnych produktów realnego producenta ani kopie zdjęć sklepu.
-Nazwy w katalogu odpowiadają rzeczywistym modelom zweryfikowanym w x-kom i Komputronik;
-grafiki pozostają poglądowe. Źródła nazw: docs/ZRODLA_NAZW_PRODUKTOW.md.
-Pliki PNG są w public/images/products i trafiają na GitHub razem z projektem.
+Aktualny katalog ma własne modele demonstracyjne BG, z opisami dopasowanymi
+do grafik. Przesyłanie własnych zdjęć przez panel: NOWE_FUNKCJE_INSTRUKCJA.txt.
+Strona używa lekkich plików WebP w public/images/products.
+Oryginalne PNG są zachowane do edycji. Obie wersje trafiają na GitHub.
 Nie ma dodatkowego pobierania zdjęć z Internetu przy uruchamianiu sklepu.
 
 Przypisanie: app/Models/Product.php -> imagePath().
-SKU KEYBOARD-1 -> keyboard.png, KEYBOARD-2 -> keyboard-2.png itd.
+SKU KEYBOARD-1 -> keyboard.webp, KEYBOARD-2 -> keyboard-2.webp itd.
 Tak samo MOUSE, HEADSET, MONITOR, PAD i USB.
 Nowy produkt dodany w panelu używa domyślnej grafiki swojej kategorii.
-Na tym etapie panel nie obsługuje przesyłania indywidualnych zdjęć.
+Zdjęcie przesłane przez moderatora/admina zastępuje domyślną wizualizację.
+Jest zapisywane prywatnie w storage/app/private/product-images i udostępniane
+przez trasę aplikacji. Można je podmienić lub przywrócić grafikę domyślną.
 
 Widoki: resources/views/catalog/index.blade.php oraz show.blade.php.
-Zdjęcie głównego banera: keyboard.png.
+Zdjęcie głównego banera: keyboard.webp.
 Styl ekspozycji zdjęć: public/css/shop.css.
 
 Po pobraniu repozytorium wszystkie pliki zdjęć są już na miejscu.

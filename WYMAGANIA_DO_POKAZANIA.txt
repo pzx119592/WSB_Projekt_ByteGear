@@ -101,7 +101,7 @@ Kod: CatalogController::index — Eloquent where() przekazuje wartości jako par
 Sortowanie wybiera kolumnę z listy w kodzie, nie z dowolnego tekstu użytkownika.
 AuthController::login korzysta z Auth::attempt(), bez sklejania SQL z formularza.
 Testy: tests/Feature/ShopTest.php — wyszukiwanie i niedozwolone sortowanie.
-Terminal: php artisan test — obecnie 31 testów / 221 asercji.
+Terminal: php artisan test — obecnie 41 testów / 310 asercji.
 To wymaganie pokaż w kodzie; sam wygląd strony nie dowodzi ochrony SQL.
 
 13. SAMODZIELNOŚĆ, TERMIN I OBRONA

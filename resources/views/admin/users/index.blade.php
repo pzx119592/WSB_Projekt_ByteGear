@@ -23,4 +23,4 @@
 </td>
 </tr>@endforeach</tbody>
 </table>
-</div>{{ $users->links('pagination::simple-default') }}@endsection
+</div>{{ $users->links('pagination.simple') }}@endsection

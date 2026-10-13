@@ -8,6 +8,8 @@ Osobna aplikacja, repozytorium i baza; wcześniejsze ćwiczenia pozostają w WSB
 **Wymagania i powiązanie z kodem:** [docs/WYMAGANIA.md](docs/WYMAGANIA.md).
 **Pliki, metody i konfiguracja do obrony:** [KOD_I_KONFIGURACJA_DO_OBRONY.txt](KOD_I_KONFIGURACJA_DO_OBRONY.txt).
 **Poczta rzeczywista i opcja zapasowa:** [POCZTA_SMTP_LUB_MAILPIT.txt](POCZTA_SMTP_LUB_MAILPIT.txt).
+**Profil, zdjęcia, anulowanie i potwierdzenia:** [NOWE_FUNKCJE_INSTRUKCJA.txt](NOWE_FUNKCJE_INSTRUKCJA.txt).
+**Przegląd wyglądu:** [docs/PRZEGLAD_WYGLADU.md](docs/PRZEGLAD_WYGLADU.md).
 
 ## Uruchomienie
 
@@ -94,8 +96,8 @@ Testy obejmują uprawnienia, CRUD, sesję koszyka, zamówienia, zapasy, próby m
 walidację, hashowanie, CSRF, ucieczkę HTML, ochronę historii i brak dostępu do NBP.
 
 Kategorie i typowe funkcje katalogu inspirowane [x-kom](https://www.x-kom.pl/) i
-[Morele](https://www.morele.net/komputery/klawiatury-i-myszki/). Nazwy rzeczywistych modeli
-sprawdzono w x-kom i Komputronik: [źródła nazw](docs/ZRODLA_NAZW_PRODUKTOW.md).
+[Morele](https://www.morele.net/komputery/klawiatury-i-myszki/). Katalog zawiera własne
+modele demonstracyjne BG i opisy dopasowane do naszych wizualizacji.
 Opisy są własne; ceny i zapasy są przykładami edukacyjnymi. Osiemnaście fotorealistycznych
 wizualizacji AI jest zapisanych lokalnie w public/images/products.
 Są ilustracjami demonstracyjnymi, nie zdjęciami konkretnych modeli producentów.

@@ -60,7 +60,7 @@ Otwórz: public/css/shop.css — style oraz reguły responsywności.
 Otwórz: resources/views/auth/register.blade.php -> @extends('layouts.app').
 Wyjaśnienie: wspólny layout zawiera nagłówek, menu i stopkę;
 widoki poszczególnych stron dostarczają zawartość przez @section.
-Grafiki: public/images/products/*.png (lokalne wizualizacje AI). Nie potrzeba kompilacji przez npm.
+Grafiki: public/images/products/*.webp (lokalne wizualizacje AI). Nie potrzeba kompilacji przez npm.
 
 6. „GDZIE REJESTRUJESZ UŻYTKOWNIKA?”
 Formularz: resources/views/auth/register.blade.php -> POST, @csrf, nazwy pól.
@@ -148,7 +148,7 @@ Otwórz: CatalogController.php -> index() -> where('active', true).
 Wyjaśnienie: produkt jest wycofywany z oferty, nie fizycznie usuwany z bazy.
 Historia zostaje, produkt można przywrócić. Powiedz to jasno nauczycielowi.
 Widoki: resources/views/admin/products/index.blade.php i form.blade.php.
-Zdjęcia: app/Models/Product.php -> imagePath() i public/images/products/*.png.
+Zdjęcia: app/Models/Product.php -> imagePath() i public/images/products/*.webp.
 18 wizualizacji przypisano do SKU danych demonstracyjnych; nowe produkty
 otrzymują domyślną wizualizację kategorii. Szczegóły: ZDJECIA_PRODUKTOW.txt.
 Uprawnienia: grupa role:admin,moderator w routes/web.php.
@@ -233,7 +233,7 @@ brak Internetu pokazuje komunikat, bez blokowania zakupów w PLN.
 Testy: tests/Feature/ShopTest.php — funkcje sklepu i przypadki błędne.
 tests/Feature/AccountSecurityTest.php — aktywacja, podpis, reset, wygasanie, sesje.
 Konfiguracja testów: phpunit.xml — SQLite :memory:, osobno od domowej MariaDB.
-Uruchomienie: php artisan test (aktualnie 31 testów, 221 asercji).
+Uruchomienie: php artisan test (aktualnie 41 testów, 310 asercji).
 Wersje bibliotek: composer.json i composer.lock; na drugim komputerze composer install.
 
 ĆWICZENIE PRZED OBRONĄ
@@ -241,3 +241,20 @@ Wybierz wymaganie, znajdź plik przez Ctrl+P, metodę przez Ctrl+F.
 Wyjaśnij wejście (adres/formularz), sprawdzenie danych/uprawnień, zapis lub odczyt
 z modelu i wynik w widoku. Następnie pokaż tę samą funkcję w przeglądarce.
 Nie trzeba uczyć się numerów linii; trzeba rozumieć przepływ danych.
+
+21. „GDZIE SĄ NOWE FUNKCJE SKLEPU?”
+Profil: app/Http/Controllers/ProfileController.php -> edit/update/password.
+Widok: resources/views/auth/profile.blade.php; adres /profil.
+Zdjęcia: AdminProductController -> data/store/update i Services/ProductImage::store.
+GD zapisuje JPG bez EXIF; obrazy są w storage/app/private/product-images.
+Wyświetlanie: CatalogController::image i Product::imagePath.
+Anulowanie: OrderController::cancel — właściciel, wymagane potwierdzenie,
+DB::transaction, lockForUpdate, increment stock; status cancelled i cancelled_at.
+Potwierdzenie zakupu: Services/OrderMail::send i Notifications/OrderConfirmation.
+Treść: resources/views/mail/order-confirmation.blade.php. Błąd SMTP nie cofa zakupu.
+Status wysyłki: orders.confirmation_sent_at; pozwala ponowić nieudaną wysyłkę.
+Nowe kolumny: migracja 2026_10_13_000003_add_product_images_and_order_cancellation.
+Testy nowych funkcji: tests/Feature/ShopExtensionsTest.php.
+Paginacja: resources/views/pagination/simple.blade.php, polskie przyciski.
+Wygląd: public/css/shop.css; fokus, układ mobilny, statusy.
+Grafiki WebP: tools/Optimize-Demo-Images.php; oryginały PNG pozostają w repozytorium.

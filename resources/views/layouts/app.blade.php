@@ -7,22 +7,23 @@
 <link rel="stylesheet" href="{{ asset('css/shop.css') }}">
 </head>
 <body>
+<a class="skip-link" href="#main-content">Przejdź do treści</a>
 <div class="topline">Peryferia do pracy i grania <span>Projekt zaliczeniowy · sklep demonstracyjny</span>
 </div>
 <header class="header">
 <a class="brand" href="{{ route('catalog') }}">
 <span class="brandmark" aria-hidden="true">▦</span>{{ config('app.name') }}</a>
 <nav aria-label="Menu główne">
-<a href="{{ route('catalog') }}">Produkty</a>
+<a href="{{ route('catalog') }}" @if(request()->routeIs('catalog','products.*')) aria-current="page" @endif>Produkty</a>
 <a href="{{ route('cart') }}">Koszyk <span class="count">{{ array_sum(session('cart', [])) }}</span>
 </a>
-@auth <a href="{{ route('dashboard') }}">Moje konto</a>
+@auth <a href="{{ route('dashboard') }}">Moje konto</a><a href="{{ route('profile.edit') }}" @if(request()->routeIs('profile.*')) aria-current="page" @endif>Mój profil</a>
 <form method="POST" action="{{ route('logout') }}">@csrf<button class="text-button">Wyloguj</button>
 </form>
 @else <a href="{{ route('login') }}">Zaloguj się</a>
 <a class="button small" href="{{ route('register') }}">Załóż konto</a> @endauth</nav>
 </header>
-<main class="wrap">
+<main class="wrap" id="main-content" tabindex="-1">
 @auth @if(in_array(auth()->user()->role, ['admin','moderator']))
 <nav class="staff-nav" aria-label="Panel zarządzania">
 <strong>{{ auth()->user()->role === 'admin' ? 'Administrator' : 'Moderator' }}</strong>

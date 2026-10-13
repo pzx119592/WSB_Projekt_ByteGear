@@ -25,6 +25,7 @@ composer --version
 Copy-Item .env.example .env
 composer install
 composer check-platform-reqs
+Obsługa własnych zdjęć wymaga PHP GD (extension=gd w php.ini).
 
 5. W .env sprawdź:
 APP_NAME="ByteGear"
@@ -60,6 +61,7 @@ moderator@example.test — moderator
 customer@example.test — klient
 
 ADRESY DO POKAZANIA
+http://127.0.0.1:8002/profil — edycja danych, e-maila i hasła po zalogowaniu.
 http://127.0.0.1:8002/ — katalog i wyszukiwarka.
 http://127.0.0.1:8002/rejestracja — nowe konto klienta.
 http://127.0.0.1:8002/logowanie — logowanie do właściwego panelu.
@@ -101,3 +103,5 @@ Aktualizacja nazw produktów demonstracyjnych jest migracją: php artisan migrat
 Zmienia tylko stare nazwy katalogowe; własne edycje i nazwy w zamówieniach pozostają.
 Pełną kopię własnych zamówień/kont zrób w phpMyAdmin -> baza -> Eksport -> SQL
 i zachowaj prywatnie. Publiczne repozytorium odtwarza przykładowy katalog, nie Twoje zakupy.
+Własne zdjęcia przesłane w panelu skopiuj razem z bazą:
+storage/app/private/product-images. Szczegóły: NOWE_FUNKCJE_INSTRUKCJA.txt.

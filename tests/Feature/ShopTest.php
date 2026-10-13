@@ -37,9 +37,9 @@ class ShopTest extends TestCase
     {
         config(['app.name' => 'Nowa Nazwa']);
         $this->get('/')->assertOk()->assertSee('Nowa Nazwa')->assertDontSee('ByteGear');
-        $this->get('/?q=Keychron')->assertOk()->assertSee('Keychron V1 Max Banana Switch Black')->assertDontSee('Logitech M185');
-        $this->get('/?min=900&max=1100')->assertOk()->assertSee('Dell P2723D')->assertDontSee('Keychron');
-        $this->get('/?sort=price_asc')->assertOk()->assertSeeInOrder(['Corsair MM300 Gaming (Small)', 'Baseus CADH000701 USB-C — USB-C 100W 1m czarny']);
+        $this->get('/?q=BG%20K')->assertOk()->assertSee('BG K75 Mechanical')->assertDontSee('BG M100');
+        $this->get('/?min=900&max=1100')->assertOk()->assertSee('BG V27 QHD')->assertDontSee('BG K');
+        $this->get('/?sort=price_asc')->assertOk()->assertSeeInOrder(['BG MousePad S', 'BG Cable C100 1m']);
         $this->get('/?sort=price_grosze;DROP%20TABLE%20users')->assertSessionHasErrors('sort');
         $this->assertDatabaseCount('users', 3);
     }
@@ -101,7 +101,7 @@ class ShopTest extends TestCase
         $this->post('/zamowienie', $this->delivery($token))->assertSessionHasErrors('order');
         $this->assertDatabaseCount('orders', 1);
         $product->update(['name' => 'Zmieniony produkt', 'price_grosze' => 1]);
-        $this->get('/zamowienia/'.$order->id)->assertOk()->assertSee('Keychron V1 Max Banana Switch Black')->assertDontSee('Zmieniony produkt');
+        $this->get('/zamowienia/'.$order->id)->assertOk()->assertSee('BG K75 Mechanical')->assertDontSee('Zmieniony produkt');
     }
 
     public function test_insufficient_stock_rolls_back_entire_order(): void
