@@ -97,5 +97,7 @@ AKTUALIZACJE
 Zachowaj .env i bazę. Pobierz nowe pliki, wykonaj composer install,
 php artisan config:clear, php artisan view:clear i php artisan migrate.
 Przed podmianą własnych plików zrób kopię. Seeder nie resetuje istniejących danych.
+Aktualizacja nazw produktów demonstracyjnych jest migracją: php artisan migrate.
+Zmienia tylko stare nazwy katalogowe; własne edycje i nazwy w zamówieniach pozostają.
 Pełną kopię własnych zamówień/kont zrób w phpMyAdmin -> baza -> Eksport -> SQL
 i zachowaj prywatnie. Publiczne repozytorium odtwarza przykładowy katalog, nie Twoje zakupy.

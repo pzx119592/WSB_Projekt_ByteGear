@@ -19,12 +19,12 @@ class ShopSeeder extends Seeder
             }
         }
         $groups = [
-            'keyboard' => ['Klawiatury', [['Keyline K75', 24990], ['Keyline Silent', 15990], ['Keyline Pro TKL', 34990]]],
-            'mouse' => ['Myszy', [['Track M1 Wireless', 11990], ['Track Pro Light', 22990], ['Track Ergo', 17990]]],
-            'headset' => ['Słuchawki', [['Sound H1 Studio', 19990], ['Sound Air Wireless', 29990], ['Sound Play', 14990]]],
-            'monitor' => ['Monitory', [['View 24 IPS', 54990], ['View 27 QHD', 99990], ['View 27 Fast', 84990]]],
-            'pad' => ['Podkładki', [['Desk Mat XL', 6990], ['Desk Mat Soft', 3990], ['Desk Mat Pro', 9990]]],
-            'usb' => ['Akcesoria USB', [['Link Hub USB-C', 12990], ['Link Dock 7w1', 24990], ['Link Cable Pro', 4990]]],
+            'keyboard' => ['Klawiatury', [['Klawiatura mechaniczna 75% USB-C — grafitowa', 24990], ['Klawiatura cicha z blokiem numerycznym — czarna', 15990], ['Klawiatura mechaniczna TKL — czarna', 34990]]],
+            'mouse' => ['Myszy', [['Mysz bezprzewodowa 2,4 GHz — czarna', 11990], ['Mysz gamingowa bezprzewodowa — lekka, czarna', 22990], ['Mysz pionowa ergonomiczna — bezprzewodowa', 17990]]],
+            'headset' => ['Słuchawki', [['Słuchawki nauszne z mikrofonem — czarne', 19990], ['Słuchawki nauszne bezprzewodowe — czarne', 29990], ['Słuchawki gamingowe z mikrofonem — czarno-niebieskie', 14990]]],
+            'monitor' => ['Monitory', [['Monitor 24″ IPS — HDMI, DisplayPort', 54990], ['Monitor 27″ QHD IPS — regulowana podstawa', 99990], ['Monitor gamingowy 27″ IPS — czarny', 84990]]],
+            'pad' => ['Podkładki', [['Podkładka na biurko XL — czarna', 6990], ['Podkładka pod mysz — miękka, czarna', 3990], ['Podkładka na biurko — szara z obszyciem', 9990]]],
+            'usb' => ['Akcesoria USB', [['Hub USB-C — USB-A, HDMI, USB-C', 12990], ['Stacja dokująca USB-C 7w1 — czytnik kart SD', 24990], ['Kabel USB-C do USB-C — w oplocie', 4990]]],
         ];
         $descriptions = [
             'keyboard' => "Wygodna klawiatura do codziennej pracy i grania.\nUkład US QWERTY • złącze USB-C • regulowana wysokość • solidna obudowa.",
