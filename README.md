@@ -11,6 +11,15 @@ Osobna aplikacja, repozytorium i baza; wcześniejsze ćwiczenia pozostają w WSB
 **Profil, zdjęcia, anulowanie i potwierdzenia:** [NOWE_FUNKCJE_INSTRUKCJA.txt](NOWE_FUNKCJE_INSTRUKCJA.txt).
 **Przegląd wyglądu:** [docs/PRZEGLAD_WYGLADU.md](docs/PRZEGLAD_WYGLADU.md).
 
+## Instrukcje PDF do pobrania
+
+- [Uruchomienie sklepu](output/pdf/Uruchomienie_sklepu_ByteGear.pdf) — 4 strony: szybki start, nowy komputer, konfiguracja, aktualizacja i prywatna kopia danych.
+- [Prezentacja projektu](output/pdf/Prezentacja_projektu_ByteGear.pdf) — 10 stron: wszystkie wymagania zaliczenia, działania w przeglądarce, oczekiwane wyniki oraz klikalne pliki i metody w kodzie.
+
+PDF-y zawierają adresy lokalnego sklepu i Mailpit. Linki do kodu otwierają GitHub;
+w VS Code można znaleźć wskazane pliki przez Ctrl+P, a metody przez Ctrl+F.
+Źródło dokumentów: `tools/Generate-Pdf-Guides.py` (ReportLab; niezależne od uruchomienia sklepu).
+
 ## Uruchomienie
 
 Po przygotowaniu środowiska i `.env`:
