@@ -1,0 +1,39 @@
+POCZTA — DWA TRYBY I OPCJA ZAPASOWA
+
+1. LOKALNA PREZENTACJA (MAILPIT)
+W .env:
+MAIL_MAILER=smtp
+MAIL_SCHEME=null
+MAIL_HOST=127.0.0.1
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_FROM_ADDRESS="sklep@bytegear.test"
+MAIL_FROM_NAME="${APP_NAME}"
+Uruchom tools/Start-Mailpit.ps1 według EMAIL_INSTRUKCJA.txt.
+Odbiór wiadomości: http://127.0.0.1:8025.
+Po pierwszej instalacji działa bez Internetu.
+
+2. WYSYŁKA DO PRAWDZIWEJ SKRZYNKI
+Zastąp wartości MAIL_HOST, MAIL_PORT, MAIL_SCHEME, MAIL_USERNAME, MAIL_PASSWORD
+i MAIL_FROM_ADDRESS danymi dostawcy SMTP. Nie wpisuj ich do publicznego repozytorium.
+Niektóre konta wymagają hasła aplikacji lub osobnego konta SMTP.
+Dokładne ustawienia zależą od dostawcy — nie można użyć dowolnego nadawcy.
+Na drugim komputerze dostawca SMTP musi być osiągalny przez Internet.
+Używaj rzeczywistego adresu przy rejestracji; @example.test jest tylko do Mailpit.
+
+3. PRZEŁĄCZANIE
+Możesz zachować Mailpit nawet po ustawieniu prawdziwego SMTP.
+Aktualnie wybrany mailer wysyła jedną wiadomość do skonfigurowanego serwera.
+Po zmianie .env wykonaj: php artisan config:clear.
+Aby wrócić do opcji zapasowej, przywróć wartości z punktu 1 i uruchom Mailpit.
+Nie trzeba zmieniać kontrolerów, kont ani migrować bazy.
+To przełączanie ręczne — nie obiecujemy automatycznego dostarczenia przez Mailpit
+po awarii zewnętrznego SMTP, bo wtedy klient nie dostałby wiadomości w swojej poczcie.
+
+4. LINKI AKTYWACYJNE
+APP_URL musi wskazywać adres działającego sklepu, np. http://127.0.0.1:8002.
+Wiadomość może dotrzeć przez Internet, ale lokalny sklep nie jest publiczną stroną.
+Link z 127.0.0.1 otwieraj na komputerze, na którym uruchomiono projekt,
+nie na telefonie czy innym komputerze. Po zmianie adresu wyślij nowy link.
+Link aktywacyjny otwarty przed logowaniem jest kontynuowany po zalogowaniu.

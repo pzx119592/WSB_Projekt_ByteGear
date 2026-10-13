@@ -7,6 +7,7 @@ Osobna aplikacja, repozytorium i baza; wcześniejsze ćwiczenia pozostają w WSB
 **Co pokazać nauczycielowi:** [PREZENTACJA.txt](PREZENTACJA.txt).
 **Wymagania i powiązanie z kodem:** [docs/WYMAGANIA.md](docs/WYMAGANIA.md).
 **Pliki, metody i konfiguracja do obrony:** [KOD_I_KONFIGURACJA_DO_OBRONY.txt](KOD_I_KONFIGURACJA_DO_OBRONY.txt).
+**Poczta rzeczywista i opcja zapasowa:** [POCZTA_SMTP_LUB_MAILPIT.txt](POCZTA_SMTP_LUB_MAILPIT.txt).
 
 ## Uruchomienie
 
@@ -93,6 +94,9 @@ Testy obejmują uprawnienia, CRUD, sesję koszyka, zamówienia, zapasy, próby m
 walidację, hashowanie, CSRF, ucieczkę HTML, ochronę historii i brak dostępu do NBP.
 
 Kategorie i typowe funkcje katalogu inspirowane [x-kom](https://www.x-kom.pl/) i
-[Morele](https://www.morele.net/komputery/klawiatury-i-myszki/). Własne nazwy produktów,
-opisy i ilustracje SVG; ceny i parametry są przykładami edukacyjnymi.
+[Morele](https://www.morele.net/komputery/klawiatury-i-myszki/). Własne nazwy produktów
+i opisy; ceny i parametry są przykładami edukacyjnymi. Osiemnaście fotorealistycznych
+wizualizacji AI jest zapisanych lokalnie w public/images/products.
+Są ilustracjami demonstracyjnymi, nie zdjęciami konkretnych modeli producentów.
+Nie pobierano zdjęć z cudzych sklepów.
 [Dokumentacja NBP](https://api.nbp.pl/), [Laravel 12](https://laravel.com/docs/12.x).

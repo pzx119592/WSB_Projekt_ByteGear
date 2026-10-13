@@ -60,7 +60,7 @@ Otwórz: public/css/shop.css — style oraz reguły responsywności.
 Otwórz: resources/views/auth/register.blade.php -> @extends('layouts.app').
 Wyjaśnienie: wspólny layout zawiera nagłówek, menu i stopkę;
 widoki poszczególnych stron dostarczają zawartość przez @section.
-Grafiki: public/images/*.svg. Nie potrzeba kompilacji przez npm.
+Grafiki: public/images/products/*.png (lokalne wizualizacje AI). Nie potrzeba kompilacji przez npm.
 
 6. „GDZIE REJESTRUJESZ UŻYTKOWNIKA?”
 Formularz: resources/views/auth/register.blade.php -> POST, @csrf, nazwy pól.
@@ -87,6 +87,8 @@ APP_KEY służy innym mechanizmom szyfrowania/podpisów, nie do odwracania hase�
 8. „GDZIE OBSŁUGUJESZ LOGOWANIE I WYLOGOWANIE?”
 Otwórz: app/Http/Controllers/AuthController.php -> login() i logout().
 Znajdź: Auth::attempt(), session()->regenerate(), Auth::logout(), invalidate().
+Po logowaniu podpisany adres aktywacyjny zapisany w url.intended jest kontynuowany;
+pozostałe adresy nie zmieniają ekranu startowego zależnego od roli.
 Wyjaśnienie: po udanym logowaniu zmieniamy identyfikator sesji;
 wylogowanie unieważnia sesję i regeneruje token CSRF.
 Widok: resources/views/auth/login.blade.php.
@@ -146,6 +148,9 @@ Otwórz: CatalogController.php -> index() -> where('active', true).
 Wyjaśnienie: produkt jest wycofywany z oferty, nie fizycznie usuwany z bazy.
 Historia zostaje, produkt można przywrócić. Powiedz to jasno nauczycielowi.
 Widoki: resources/views/admin/products/index.blade.php i form.blade.php.
+Zdjęcia: app/Models/Product.php -> imagePath() i public/images/products/*.png.
+18 wizualizacji przypisano do SKU danych demonstracyjnych; nowe produkty
+otrzymują domyślną wizualizację kategorii. Szczegóły: ZDJECIA_PRODUKTOW.txt.
 Uprawnienia: grupa role:admin,moderator w routes/web.php.
 Ceny w formularzu są w złotych, w bazie w całkowitych groszach.
 
@@ -228,7 +233,7 @@ brak Internetu pokazuje komunikat, bez blokowania zakupów w PLN.
 Testy: tests/Feature/ShopTest.php — funkcje sklepu i przypadki błędne.
 tests/Feature/AccountSecurityTest.php — aktywacja, podpis, reset, wygasanie, sesje.
 Konfiguracja testów: phpunit.xml — SQLite :memory:, osobno od domowej MariaDB.
-Uruchomienie: php artisan test (aktualnie 29 testów, 210 asercji).
+Uruchomienie: php artisan test (aktualnie 31 testów, 221 asercji).
 Wersje bibliotek: composer.json i composer.lock; na drugim komputerze composer install.
 
 ĆWICZENIE PRZED OBRONĄ

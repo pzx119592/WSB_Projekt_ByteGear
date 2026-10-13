@@ -3,7 +3,8 @@
 @section('content')<a href="{{ route('catalog') }}">← Wróć do produktów</a>
 <section class="product-detail">
 <div class="detail-image">
-<img src="{{ asset('images/'.$product->category->slug.'.svg') }}" alt="{{ $product->category->name }}">
+<img src="{{ asset($product->imagePath()) }}" alt="Wizualizacja produktu: {{ $product->name }}">
+<small class="muted">Wizualizacja produktu demonstracyjnego.</small>
 </div>
 <div>
 <span class="eyebrow">{{ $product->category->name }}</span>

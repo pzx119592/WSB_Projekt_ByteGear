@@ -8,7 +8,7 @@
 <p>Klawiatury, myszy i akcesoria, z którymi praca i granie stają się przyjemniejsze.</p>
 <a class="button" href="#produkty">Przeglądaj produkty →</a>
 </div>
-<img src="{{ asset('images/keyboard.svg') }}" alt="Ilustracja klawiatury komputerowej">
+<img src="{{ asset('images/products/keyboard.png') }}" alt="Studyjna wizualizacja klawiatury komputerowej">
 </section>
 <div class="category-links">
 <a href="{{ route('catalog') }}">Wszystko</a>@foreach($categories as $category)<a @class(['selected' => (string)request('category') === (string)$category->id]) href="{{ route('catalog',['category'=>$category->id]) }}">{{ $category->name }}</a>@endforeach</div>
@@ -38,7 +38,7 @@
 </form>
 <div class="product-grid">@forelse($products as $product)<article class="product-card">
 <a class="product-image" href="{{ route('products.show',$product) }}">
-<img src="{{ asset('images/'.$product->category->slug.'.svg') }}" alt="{{ $product->category->name }}">
+<img src="{{ asset($product->imagePath()) }}" alt="Wizualizacja produktu: {{ $product->name }}" loading="lazy">
 </a>
 <div class="card-body">
 <span class="muted">{{ $product->category->name }}</span>

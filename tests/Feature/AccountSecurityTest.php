@@ -66,6 +66,25 @@ class AccountSecurityTest extends TestCase
         $this->assertNull($user->fresh()->email_verified_at);
     }
 
+    public function test_activation_link_opened_as_guest_is_completed_after_login(): void
+    {
+        $user = $this->customer();
+        $link = $this->signed($user);
+        $this->get($link)->assertRedirect('/logowanie');
+        $this->post('/logowanie', ['email' => $user->email, 'password' => 'password'])->assertRedirect($link);
+        $this->get($link)->assertRedirect('/konto');
+        $this->assertTrue($user->fresh()->hasVerifiedEmail());
+    }
+
+    public function test_login_does_not_follow_external_or_unrelated_intended_addresses(): void
+    {
+        $user = $this->customer();
+        foreach (['https://outside.example/potwierdz-email/1/hash', route('catalog')] as $intended) {
+            $this->withSession(['url.intended' => $intended])->post('/logowanie', ['email' => $user->email, 'password' => 'password'])->assertRedirect('/konto');
+            $this->post('/wyloguj');
+        }
+    }
+
     public function test_resend_is_limited_and_verified_staff_gate_is_enforced(): void
     {
         $user = $this->customer();

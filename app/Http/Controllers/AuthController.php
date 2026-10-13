@@ -42,7 +42,14 @@ class AuthController extends Controller
         }
         $request->session()->regenerate();
 
-        // Każda rola otrzymuje swój ekran, bez przekierowania do panelu innej roli.
+        // Zachowujemy podpisany link aktywacyjny otwarty przed zalogowaniem.
+        // Pozostałe adresy nie zmieniają ekranu startowego przypisanego do roli.
+        $intended = $request->session()->pull('url.intended');
+        $verificationPrefix = route('verification.notice').'/';
+        if (is_string($intended) && str_starts_with($intended, $verificationPrefix)) {
+            return redirect()->to($intended);
+        }
+
         return redirect()->route('dashboard');
     }
 
