@@ -2,6 +2,8 @@ ZDJĘCIA PRODUKTÓW — LOKALNE WIZUALIZACJE DEMONSTRACYJNE
 
 18 modeli z katalogu ma osobne fotorealistyczne wizualizacje wygenerowane AI.
 Nie są to zdjęcia konkretnych produktów realnego producenta ani kopie zdjęć sklepu.
+Nazwy w katalogu odpowiadają rzeczywistym modelom zweryfikowanym w x-kom i Komputronik;
+grafiki pozostają poglądowe. Źródła nazw: docs/ZRODLA_NAZW_PRODUKTOW.md.
 Pliki PNG są w public/images/products i trafiają na GitHub razem z projektem.
 Nie ma dodatkowego pobierania zdjęć z Internetu przy uruchamianiu sklepu.
 

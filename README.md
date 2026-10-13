@@ -94,8 +94,9 @@ Testy obejmują uprawnienia, CRUD, sesję koszyka, zamówienia, zapasy, próby m
 walidację, hashowanie, CSRF, ucieczkę HTML, ochronę historii i brak dostępu do NBP.
 
 Kategorie i typowe funkcje katalogu inspirowane [x-kom](https://www.x-kom.pl/) i
-[Morele](https://www.morele.net/komputery/klawiatury-i-myszki/). Własne nazwy produktów
-i opisy; ceny i parametry są przykładami edukacyjnymi. Osiemnaście fotorealistycznych
+[Morele](https://www.morele.net/komputery/klawiatury-i-myszki/). Nazwy rzeczywistych modeli
+sprawdzono w x-kom i Komputronik: [źródła nazw](docs/ZRODLA_NAZW_PRODUKTOW.md).
+Opisy są własne; ceny i zapasy są przykładami edukacyjnymi. Osiemnaście fotorealistycznych
 wizualizacji AI jest zapisanych lokalnie w public/images/products.
 Są ilustracjami demonstracyjnymi, nie zdjęciami konkretnych modeli producentów.
 Nie pobierano zdjęć z cudzych sklepów.
