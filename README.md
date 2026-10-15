@@ -3,12 +3,13 @@
 Aktualna nazwa: **ByteGear**. Laravel 12, PHP 8.2+, Blade, HTML5, CSS3 i MariaDB.
 Osobna aplikacja, repozytorium i baza; wcześniejsze ćwiczenia pozostają w WSB_ZastProg.
 
-**Uruchomienie na drugim komputerze:** [INSTRUKCJA.txt](INSTRUKCJA.txt).
-**Co pokazać nauczycielowi:** [PREZENTACJA.txt](PREZENTACJA.txt).
+**Instalacja od zera w CMD:** [PDF instalacji](output/pdf/Instalacja_od_zera_CMD_ByteGear.pdf).
+**Co pokazać nauczycielowi:** [PDF prezentacji krok po kroku](output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf).
 **Wymagania i powiązanie z kodem:** [docs/WYMAGANIA.md](docs/WYMAGANIA.md).
 **Pliki, metody i konfiguracja do obrony:** [KOD_I_KONFIGURACJA_DO_OBRONY.txt](KOD_I_KONFIGURACJA_DO_OBRONY.txt).
 **Poczta rzeczywista i opcja zapasowa:** [POCZTA_SMTP_LUB_MAILPIT.txt](POCZTA_SMTP_LUB_MAILPIT.txt).
-**Profil, zdjęcia, anulowanie i potwierdzenia:** [NOWE_FUNKCJE_INSTRUKCJA.txt](NOWE_FUNKCJE_INSTRUKCJA.txt).
+**Aktualizacja, kopia danych i zmiana nazwy:** [docs/AKTUALIZACJA_I_KOPIA.md](docs/AKTUALIZACJA_I_KOPIA.md).
+**Zdjęcia i ich przenoszenie:** [ZDJECIA_PRODUKTOW.txt](ZDJECIA_PRODUKTOW.txt).
 **Przegląd wyglądu:** [docs/PRZEGLAD_WYGLADU.md](docs/PRZEGLAD_WYGLADU.md).
 **Drzewko folderów i szybkie szukanie HTML, CSS oraz działania:** [MAPA_PLIKOW.md](MAPA_PLIKOW.md).
 
@@ -16,31 +17,27 @@ Osobna aplikacja, repozytorium i baza; wcześniejsze ćwiczenia pozostają w WSB
 
 - **[Instalacja od zera w CMD — zacznij tutaj na nowym komputerze](output/pdf/Instalacja_od_zera_CMD_ByteGear.pdf)** — 4 strony, prosta lista 27 kroków: gdzie kliknąć i co wpisać. XAMPP, GD/ZIP, Composer i Laravel, import SQL lub dane przykładowe, .env, Mailpit oraz konta. Bez kolorowych ramek i ozdobników. Zastępuje poprzednią instrukcję instalacji w CMD.
 - [Prezentacja krok po kroku dla początkujących](output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf) — 12 stron: co kliknąć, pełne ścieżki plików HTML i CSS, jak znaleźć je w VS Code oraz proste wyjaśnienia do prezentacji.
-- [Uruchomienie sklepu](output/pdf/Uruchomienie_sklepu_ByteGear.pdf) — 4 strony: szybki start, nowy komputer, konfiguracja, aktualizacja i prywatna kopia danych.
-- [Prezentacja projektu](output/pdf/Prezentacja_projektu_ByteGear.pdf) — 10 stron: wszystkie wymagania zaliczenia, działania w przeglądarce, oczekiwane wyniki oraz klikalne pliki i metody w kodzie.
 
 PDF-y zawierają adresy lokalnego sklepu i Mailpit. Linki do kodu otwierają GitHub;
 w VS Code można znaleźć wskazane pliki przez Ctrl+P, a metody przez Ctrl+F.
-Źródło dokumentów: `tools/Generate-Pdf-Guides.py` (ReportLab; niezależne od uruchomienia sklepu).
-Wersję dla początkujących tworzy osobno `tools/Generate-Beginner-Guide.py`.
+Pozostawiono dwa aktualne PDF-y: instalację i prezentację. Szczegóły kodu są w TXT wskazanym wyżej.
+PDF prezentacji tworzy `tools/Generate-Beginner-Guide.py` (ReportLab; niezależne od uruchomienia sklepu).
 Instrukcję instalacji w CMD tworzy `tools/Generate-Cmd-Setup-Guide.py`.
 
-## Uruchomienie
+## Kolejne uruchomienie już zainstalowanego sklepu
 
-Po przygotowaniu środowiska i `.env`:
+Włącz MySQL w XAMPP. Otwórz CMD i wykonaj polecenia pojedynczo:
 
-```powershell
-cd C:\xampp\htdocs\bytegear
-$env:Path = "C:\xampp\php;" + $env:Path
-composer install
-php artisan key:generate
-php artisan migrate --seed
-powershell -NoProfile -ExecutionPolicy Bypass -File tools\Start-Mailpit.ps1
+```cmd
+cd /d C:\xampp\htdocs\bytegear
+set "PATH=C:\xampp\php;%PATH%"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools\Start-Mailpit.ps1
 php artisan serve --host=127.0.0.1 --port=8002
 ```
 
-W XAMPP musi działać MySQL. Utwórz najpierw bazę `bytegear` i skopiuj `.env.example` do `.env`.
-Klucz generuj tylko przy nowej instalacji. Nie potrzebujesz Node.js ani npm.
+Zostaw terminal otwarty; Ctrl+C zatrzymuje serwer. Apache jest dodatkowo potrzebny do phpMyAdmin.
+Na nowym komputerze wykonaj najpierw PDF instalacji. Przy zwykłym starcie nie kopiuj `.env`,
+nie generuj ponownie klucza i nie resetuj bazy. Nie potrzebujesz Node.js ani npm.
 
 Sklep: **http://127.0.0.1:8002/**. Port 8002 pozwala jednocześnie uruchomić ćwiczenia na 8000.
 
@@ -101,7 +98,7 @@ Skrypt pobiera oficjalny Mailpit 1.31.4 dla Windows x64 i sprawdza SHA256.
 Zostaje zainstalowany poza repozytorium w `C:\xampp\tools\mailpit`.
 Skrzynka jest dostępna tylko lokalnie. Wiadomości nie trafiają do rzeczywistych skrzynek.
 Do wysyłki przez Internet można później podstawić własny serwer SMTP w `.env`.
-Szczegóły i gotowy scenariusz: [EMAIL_INSTRUKCJA.txt](EMAIL_INSTRUKCJA.txt).
+Konfiguracja, aktywacja, reset i potwierdzenia: [POCZTA_SMTP_LUB_MAILPIT.txt](POCZTA_SMTP_LUB_MAILPIT.txt).
 
 ## Testy i inspiracje
 

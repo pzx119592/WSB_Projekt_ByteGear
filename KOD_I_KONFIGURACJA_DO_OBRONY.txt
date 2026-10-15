@@ -6,7 +6,8 @@ Ctrl+P -> wklej ścieżkę podaną poniżej -> Enter.
 Ctrl+F -> wpisz podaną metodę lub fragment kodu.
 Ścieżki są względem folderu projektu. Metody są pewniejsze niż numery linii,
 które mogą się zmieniać po aktualizacjach. Czytaj wyjaśnienia i przećwicz je.
-WYMAGANIA_DO_POKAZANIA.txt zawiera osobno adresy i scenariusze w przeglądarce.
+Scenariusz przeglądarki: output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf.
+Szybkie drzewko: MAPA_PLIKOW.md. Lista wymagań: docs/WYMAGANIA.md.
 
 1. „GDZIE JEST POŁĄCZENIE Z BAZĄ?”
 Otwórz: .env (lokalnie), a do publicznego pokazu najlepiej .env.example.
@@ -242,9 +243,12 @@ Wyjaśnij wejście (adres/formularz), sprawdzenie danych/uprawnień, zapis lub o
 z modelu i wynik w widoku. Następnie pokaż tę samą funkcję w przeglądarce.
 Nie trzeba uczyć się numerów linii; trzeba rozumieć przepływ danych.
 
-21. „GDZIE SĄ NOWE FUNKCJE SKLEPU?”
+21. „GDZIE SĄ PROFIL, ZDJĘCIA, ANULOWANIE I POTWIERDZENIA?”
 Profil: app/Http/Controllers/ProfileController.php -> edit/update/password.
 Widok: resources/views/auth/profile.blade.php; adres /profil.
+Zmiana imienia nie wymaga hasła. Zmiana e-maila wymaga obecnego hasła i aktywacji.
+Do potwierdzenia adresu panel zakupów jest zablokowany, ale profil pozwala go poprawić.
+Nowe hasło musi różnić się od obecnego; pozostałe sesje są usuwane, bieżąca pozostaje.
 Zdjęcia: AdminProductController -> data/store/update i Services/ProductImage::store.
 GD zapisuje JPG bez EXIF; obrazy są w storage/app/private/product-images.
 Wyświetlanie: CatalogController::image i Product::imagePath.
@@ -253,6 +257,9 @@ DB::transaction, lockForUpdate, increment stock; status cancelled i cancelled_at
 Potwierdzenie zakupu: Services/OrderMail::send i Notifications/OrderConfirmation.
 Treść: resources/views/mail/order-confirmation.blade.php. Błąd SMTP nie cofa zakupu.
 Status wysyłki: orders.confirmation_sent_at; pozwala ponowić nieudaną wysyłkę.
+Po skutecznej wysyłce aplikacja nie wysyła ponownie tego samego potwierdzenia.
+Anulowanie jest tylko dla własnego nowego zamówienia i wymaga potwierdzenia.
+Sztuki wracają do magazynu raz; zamówienie i jego pozycje pozostają w historii.
 Nowe kolumny: migracja 2026_10_13_000003_add_product_images_and_order_cancellation.
 Testy nowych funkcji: tests/Feature/ShopExtensionsTest.php.
 Paginacja: resources/views/pagination/simple.blade.php, polskie przyciski.

@@ -1,4 +1,7 @@
-POCZTA — DWA TRYBY I OPCJA ZAPASOWA
+POCZTA — MAILPIT, SMTP, AKTYWACJA, RESET I POTWIERDZENIA
+
+Pierwsza instalacja: output/pdf/Instalacja_od_zera_CMD_ByteGear.pdf.
+Polecenia wykonuj w CMD w folderze C:\xampp\htdocs\bytegear.
 
 1. LOKALNA PREZENTACJA (MAILPIT)
 W .env:
@@ -10,9 +13,15 @@ MAIL_USERNAME=null
 MAIL_PASSWORD=null
 MAIL_FROM_ADDRESS="sklep@bytegear.test"
 MAIL_FROM_NAME="${APP_NAME}"
-Uruchom tools/Start-Mailpit.ps1 według EMAIL_INSTRUKCJA.txt.
+W CMD uruchom:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools\Start-Mailpit.ps1
+Po zmianie .env: php artisan config:clear.
 Odbiór wiadomości: http://127.0.0.1:8025.
 Po pierwszej instalacji działa bez Internetu.
+Pierwszy start pobiera oficjalny Mailpit dla Windows x64 i sprawdza SHA256.
+Instalacja jest w C:\xampp\tools\mailpit, wiadomości w mailpit.db poza GitHubem.
+Skrypt musi móc zapisywać do tego folderu. Sklep i Mailpit działają równocześnie.
+ExecutionPolicy dotyczy uruchomienia skryptu, nie zmienia polityki globalnej.
 
 2. WYSYŁKA DO PRAWDZIWEJ SKRZYNKI
 Zastąp wartości MAIL_HOST, MAIL_PORT, MAIL_SCHEME, MAIL_USERNAME, MAIL_PASSWORD
@@ -37,3 +46,37 @@ Wiadomość może dotrzeć przez Internet, ale lokalny sklep nie jest publiczną
 Link z 127.0.0.1 otwieraj na komputerze, na którym uruchomiono projekt,
 nie na telefonie czy innym komputerze. Po zmianie adresu wyślij nowy link.
 Link aktywacyjny otwarty przed logowaniem jest kontynuowany po zalogowaniu.
+
+5. AKTYWACJA KONTA — CO KLIKNĄĆ
+http://127.0.0.1:8002/rejestracja — dodaj konto, np. pokaz@example.test.
+http://127.0.0.1:8002/logowanie — zaloguj się na nowe konto.
+http://127.0.0.1:8002/konto — pojawi się prośba o potwierdzenie.
+http://127.0.0.1:8025 — otwórz wiadomość dla tego adresu i kliknij Aktywuj konto.
+Link otwórz w profilu przeglądarki zalogowanym na to samo konto.
+Ponownie otwórz /konto: panel powinien działać.
+Link ma podpis i ważność 60 minut; na ekranie aktywacji można ponowić wysyłkę.
+Konta demo z seedera są aktywowane. Konta dodane przez administratora dostają link.
+Zmiana e-maila wymaga ponownego potwierdzenia adresu.
+
+6. RESET ZAPOMNIANEGO HASŁA
+Wyloguj się. Otwórz http://127.0.0.1:8002/zapomniane-haslo i podaj adres konta.
+W Mailpit otwórz Zmiana hasła, kliknij Ustaw nowe hasło.
+Ustaw inne poprawne hasło dwukrotnie i zaloguj się nim.
+Link ma token; nie wpisuj adresu resetu ręcznie. Działa raz przez 60 minut.
+Stare hasło i poprzednie sesje są unieważniane. Reset nie aktywuje konta.
+Kolejną wiadomość resetu można wysłać po upływie ograniczenia, zwykle minuty.
+
+7. POTWIERDZENIE ZAMÓWIENIA
+Po zakupie wiadomość zawiera numer, pozycje, kwotę i dane dostawy z chwili zakupu.
+W Mailpit szukaj Potwierdzenie zamówienia #...
+Błąd SMTP nie cofa zamówienia. W szczegółach pojawia się Wyślij potwierdzenie.
+Uruchom pocztę i ponów wysyłkę. Po skutecznym wysłaniu nie jest wysyłana ponownie.
+Nie trzeba uruchamiać php artisan queue:work.
+
+8. PROBLEMY I ZATRZYMANIE
+Brak wiadomości: sprawdź Mailpit, MAIL_* i config:clear, potem ponów wysyłkę.
+Szczegóły błędu SMTP: storage/logs/laravel.log.
+Link 403: sprawdź właściwe konto, APP_URL, ważność; poproś o nowy link.
+Porty 1025/8025 zajęte: ustal program, który ich używa; nie zatrzymuj go w ciemno.
+Wiadomości testowe można usuwać w Mailpit. Proces mailpit.exe zatrzymasz
+w Menedżerze zadań po zakończeniu pokazu.

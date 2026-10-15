@@ -3,7 +3,7 @@ ZDJĘCIA PRODUKTÓW — LOKALNE WIZUALIZACJE DEMONSTRACYJNE
 18 modeli z katalogu ma osobne fotorealistyczne wizualizacje wygenerowane AI.
 Nie są to zdjęcia konkretnych produktów realnego producenta ani kopie zdjęć sklepu.
 Aktualny katalog ma własne modele demonstracyjne BG, z opisami dopasowanymi
-do grafik. Przesyłanie własnych zdjęć przez panel: NOWE_FUNKCJE_INSTRUKCJA.txt.
+do grafik. Przesyłanie własnych zdjęć opisano poniżej.
 Strona używa lekkich plików WebP w public/images/products.
 Oryginalne PNG są zachowane do edycji. Obie wersje trafiają na GitHub.
 Nie ma dodatkowego pobierania zdjęć z Internetu przy uruchamianiu sklepu.
@@ -20,7 +20,25 @@ Widoki: resources/views/catalog/index.blade.php oraz show.blade.php.
 Zdjęcie głównego banera: keyboard.webp.
 Styl ekspozycji zdjęć: public/css/shop.css.
 
-Po pobraniu repozytorium wszystkie pliki zdjęć są już na miejscu.
+Po pobraniu repozytorium wszystkie DOMYŚLNE grafiki są już na miejscu.
 Nie trzeba migracji, uruchamiania seedera, npm ani generowania nowych obrazów.
 Po aktualizacji istniejącego projektu wykonaj php artisan view:clear
 i odśwież przeglądarkę; przy starym wyglądzie użyj Ctrl+F5.
+
+WŁASNE ZDJĘCIA — DODAWANIE I LIMITY
+Zaloguj moderator@example.test lub admin@example.test (DemoSklep123!, jeśli nie zmienione).
+http://127.0.0.1:8002/panel/products -> Edytuj -> Zdjęcie produktu.
+Wybierz plik i zapisz. Możesz podmienić zdjęcie lub wrócić do grafiki domyślnej.
+Nie wybieraj nowego zdjęcia i usunięcia obecnego jednocześnie.
+JPG/PNG/WebP, maks. 4 MB, od 160 x 160 do 4096 x 4096 pikseli.
+Serwer zapisuje JPG o najdłuższym boku do 1600 px, bez metadanych EXIF.
+W PHP musi być włączone GD: extension=gd w C:\xampp\php\php.ini.
+upload_max_filesize i post_max_size muszą pozwalać na 4 MB, np. 8M i 12M.
+Po zmianie php.ini uruchom serwer PHP ponownie.
+
+KOPIA WŁASNYCH ZDJĘĆ
+Zdjęcia dodane przez panel nie są publikowane na GitHubie.
+Przenieś prywatnie SQL razem z folderem storage/app/private/product-images,
+zachowując nazwy plików. Dokładne kroki: docs/AKTUALIZACJA_I_KOPIA.md.
+Samo pobranie GitHub odtwarza przykładowy katalog, nie własne zmiany w bazie.
+Nie wykonuj storage:link — zdjęcia obsługuje trasa aplikacji.

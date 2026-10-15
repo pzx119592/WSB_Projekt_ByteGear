@@ -170,15 +170,19 @@ Migracje opisują strukturę, a seeder dostarcza dane przykładowe.
 bytegear/
 ├── MAPA_PLIKOW.md                      ← czytasz właśnie tę ściągę
 ├── README.md                          ← opis projektu i odnośniki do instrukcji
-├── INSTRUKCJA.txt                      ← uruchomienie i przenoszenie projektu
-├── PREZENTACJA.txt                     ← scenariusz pokazu
 ├── KOD_I_KONFIGURACJA_DO_OBRONY.txt     ← dokładniejsze wyjaśnienia kodu
-├── output/pdf/                        ← instrukcje w PDF, w tym wersja dla początkujących
-├── docs/                              ← wymagania, historia produktów i opis wyglądu
+├── POCZTA_SMTP_LUB_MAILPIT.txt          ← poczta, aktywacja i reset
+├── ZDJECIA_PRODUKTOW.txt               ← grafiki, własne zdjęcia i limity
+├── output/pdf/
+│   ├── Instalacja_od_zera_CMD_ByteGear.pdf ← jeden przewodnik instalacji
+│   └── Prezentacja_krok_po_kroku_ByteGear.pdf ← jeden scenariusz pokazu
+├── docs/
+│   ├── AKTUALIZACJA_I_KOPIA.md         ← aktualizacja, własne dane, nazwa sklepu
+│   ├── WYMAGANIA.md                   ← mapa wymagań zaliczenia
+│   └── pozostałe dokumenty .md         ← opis wyglądu i decyzji projektowych
 ├── tools/
 │   ├── Start-Mailpit.ps1               ← uruchomienie lokalnej skrzynki e-mail
 │   ├── Optimize-Demo-Images.php        ← przygotowanie lżejszych grafik WebP
-│   ├── Generate-Pdf-Guides.py          ← tworzenie dwóch pierwszych PDF-ów
 │   ├── Generate-Beginner-Guide.py      ← tworzenie PDF-a krok po kroku
 │   └── Generate-Cmd-Setup-Guide.py     ← tworzenie PDF-a instalacji od zera w CMD
 ├── tests/Feature/

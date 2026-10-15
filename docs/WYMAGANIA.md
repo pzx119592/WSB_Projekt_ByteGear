@@ -1,5 +1,10 @@
 # Wymagania i miejsca w kodzie
 
+Scenariusz pokazania tych punktów w przeglądarce:
+[Prezentacja krok po kroku — PDF](../output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf).
+Szczegółowe metody i wyjaśnienia:
+[KOD_I_KONFIGURACJA_DO_OBRONY.txt](../KOD_I_KONFIGURACJA_DO_OBRONY.txt).
+
 | Wymaganie | Realizacja |
 |---|---|
 | Rejestracja i logowanie z bazą | AuthController, User, tabela users |
@@ -40,3 +45,12 @@ odmowę dostępu, manipulację ceną, błędne dane, braki magazynowe, powtórne
 zamówienia, XSS, próbę SQL Injection i brak sieci dla NBP.
 Zakup demonstracyjny sprawdzono również w przeglądarce na lokalnej MariaDB.
 Nie jest to aplikacja przygotowana do obsługi rzeczywistych płatności produkcyjnych.
+
+## Warunki pokazu i oddania
+
+Mailpit odbiera aktywację przez SMTP lokalnie; do dostarczenia na zewnętrzną skrzynkę
+potrzebny jest własny SMTP. Konfiguracja: [instrukcja poczty](../POCZTA_SMTP_LUB_MAILPIT.txt).
+API NBP jest dodatkiem, a nie warunkiem złożenia zamówienia w PLN.
+Samodzielność, termin oddania i obrona nie są potwierdzane przez testy aplikacji.
+Projekt powstawał z pomocą asystenta; przedstaw swój wkład zgodnie z zasadami prowadzącego
+i przećwicz wyjaśnienie kodu. Ocenę przyznaje prowadzący po prezentacji.
