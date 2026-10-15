@@ -14,7 +14,7 @@ Osobna aplikacja, repozytorium i baza; wcześniejsze ćwiczenia pozostają w WSB
 
 ## Instrukcje PDF do pobrania
 
-- **[Instalacja od zera w CMD — zacznij tutaj na nowym komputerze](output/pdf/Instalacja_od_zera_CMD_ByteGear.pdf)** — 8 stron: XAMPP, GD/ZIP, Composer i Laravel, import SQL lub dane przykładowe, .env, Mailpit, konta i rozwiązania błędów. Polecenia do wklejania pojedynczo, z informacją, w którym programie je wykonać.
+- **[Instalacja od zera w CMD — zacznij tutaj na nowym komputerze](output/pdf/Instalacja_od_zera_CMD_ByteGear.pdf)** — 4 strony, prosta lista 27 kroków: gdzie kliknąć i co wpisać. XAMPP, GD/ZIP, Composer i Laravel, import SQL lub dane przykładowe, .env, Mailpit oraz konta. Bez kolorowych ramek i ozdobników. Zastępuje poprzednią instrukcję instalacji w CMD.
 - [Prezentacja krok po kroku dla początkujących](output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf) — 12 stron: co kliknąć, pełne ścieżki plików HTML i CSS, jak znaleźć je w VS Code oraz proste wyjaśnienia do prezentacji.
 - [Uruchomienie sklepu](output/pdf/Uruchomienie_sklepu_ByteGear.pdf) — 4 strony: szybki start, nowy komputer, konfiguracja, aktualizacja i prywatna kopia danych.
 - [Prezentacja projektu](output/pdf/Prezentacja_projektu_ByteGear.pdf) — 10 stron: wszystkie wymagania zaliczenia, działania w przeglądarce, oczekiwane wyniki oraz klikalne pliki i metody w kodzie.
