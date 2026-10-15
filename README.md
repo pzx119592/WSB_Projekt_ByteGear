@@ -1,116 +1,285 @@
-# Sklep z peryferiami komputerowymi — projekt zaliczeniowy
+# ByteGear — instalacja i uruchomienie sklepu
 
-Aktualna nazwa: **ByteGear**. Laravel 12, PHP 8.2+, Blade, HTML5, CSS3 i MariaDB.
-Osobna aplikacja, repozytorium i baza; wcześniejsze ćwiczenia pozostają w WSB_ZastProg.
+Instrukcja na Windows, od początku. **Polecenia wpisuj w CMD, każde osobno, i naciskaj Enter.**
+Jeśli pojawi się błąd, zatrzymaj się na tym kroku.
 
-**Instalacja od zera w CMD:** [PDF instalacji](output/pdf/Instalacja_od_zera_CMD_ByteGear.pdf).
-**Co pokazać nauczycielowi:** [PDF prezentacji krok po kroku](output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf).
-**Wymagania i powiązanie z kodem:** [docs/WYMAGANIA.md](docs/WYMAGANIA.md).
-**Pliki, metody i konfiguracja do obrony:** [KOD_I_KONFIGURACJA_DO_OBRONY.txt](KOD_I_KONFIGURACJA_DO_OBRONY.txt).
-**Poczta rzeczywista i opcja zapasowa:** [POCZTA_SMTP_LUB_MAILPIT.txt](POCZTA_SMTP_LUB_MAILPIT.txt).
-**Aktualizacja, kopia danych i zmiana nazwy:** [docs/AKTUALIZACJA_I_KOPIA.md](docs/AKTUALIZACJA_I_KOPIA.md).
-**Zdjęcia i ich przenoszenie:** [ZDJECIA_PRODUKTOW.txt](ZDJECIA_PRODUKTOW.txt).
-**Przegląd wyglądu:** [docs/PRZEGLAD_WYGLADU.md](docs/PRZEGLAD_WYGLADU.md).
-**Drzewko folderów i szybkie szukanie HTML, CSS oraz działania:** [MAPA_PLIKOW.md](MAPA_PLIKOW.md).
+[Ta instrukcja w PDF](output/pdf/Instalacja_od_zera_CMD_ByteGear.pdf) ·
+[Prezentacja dla nauczyciela](output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf) ·
+[Drzewko plików](MAPA_PLIKOW.md)
 
-## Instrukcje PDF do pobrania
+Jeśli sklep jest już zainstalowany, przejdź do [kolejnego uruchomienia](#kolejne-uruchomienie).
 
-- **[Instalacja od zera w CMD — zacznij tutaj na nowym komputerze](output/pdf/Instalacja_od_zera_CMD_ByteGear.pdf)** — 4 strony, prosta lista 27 kroków: gdzie kliknąć i co wpisać. XAMPP, GD/ZIP, Composer i Laravel, import SQL lub dane przykładowe, .env, Mailpit oraz konta. Bez kolorowych ramek i ozdobników. Zastępuje poprzednią instrukcję instalacji w CMD.
-- [Prezentacja krok po kroku dla początkujących](output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf) — 12 stron: co kliknąć, pełne ścieżki plików HTML i CSS, jak znaleźć je w VS Code oraz proste wyjaśnienia do prezentacji.
+## 1. Zainstaluj i włącz XAMPP
 
-PDF-y zawierają adresy lokalnego sklepu i Mailpit. Linki do kodu otwierają GitHub;
-w VS Code można znaleźć wskazane pliki przez Ctrl+P, a metody przez Ctrl+F.
-Pozostawiono dwa aktualne PDF-y: instalację i prezentację. Szczegóły kodu są w TXT wskazanym wyżej.
-PDF prezentacji tworzy `tools/Generate-Beginner-Guide.py` (ReportLab; niezależne od uruchomienia sklepu).
-Instrukcję instalacji w CMD tworzy `tools/Generate-Cmd-Setup-Guide.py`.
+Pobierz [XAMPP dla Windows z PHP 8.2](https://www.apachefriends.org/download.html).
+Jeśli jest już zainstalowany, pomiń instalację.
 
-## Kolejne uruchomienie już zainstalowanego sklepu
+1. Uruchom instalator. Potrzebne składniki: Apache, PHP, MySQL/MariaDB i phpMyAdmin.
+2. Zainstaluj w `C:\xampp`.
+3. Otwórz **XAMPP Control Panel**.
+4. Kliknij **Start** przy **Apache** i **MySQL**. Obie pozycje powinny być zielone.
 
-Włącz MySQL w XAMPP. Otwórz CMD i wykonaj polecenia pojedynczo:
+## 2. Włącz GD i ZIP w PHP
+
+1. W Notatniku otwórz **`C:\xampp\php\php.ini`**.
+2. Naciśnij Ctrl+F i znajdź `extension=gd`.
+3. Usuń początkowy średnik `;`, jeśli jest. Tak samo zrób z `extension=zip`.
+
+Linie mają wyglądać tak:
+
+```ini
+extension=gd
+extension=zip
+```
+
+Nie dopisuj drugiej aktywnej kopii tych samych linii. Zapisz **Ctrl+S** i zamknij Notatnik.
+W XAMPP kliknij **Stop**, a następnie **Start** przy Apache.
+
+## 3. Zainstaluj Composer i otwórz CMD
+
+1. Pobierz i uruchom [Composer-Setup.exe](https://getcomposer.org/Composer-Setup.exe).
+2. Gdy instalator pyta o PHP, wskaż **`C:\xampp\php\php.exe`**.
+3. Proxy zostaw niewłączone, chyba że uczelnia podała własne ustawienia.
+4. Dokończ instalację i zamknij stare terminale.
+5. Naciśnij **Windows+R**, wpisz **`cmd`** i Enter.
+
+To ma być **Wiersz polecenia**, nie PowerShell zaczynający się od `PS`.
+W CMD wklej to polecenie i naciśnij Enter:
+
+```cmd
+set "PATH=C:\xampp\php;%PATH%"
+```
+
+Następnie osobno sprawdź PHP:
+
+```cmd
+php --version
+```
+
+I Composer:
+
+```cmd
+composer --version
+```
+
+Powinny wyświetlić się wersje obu programów. Jeśli polecenie nie jest rozpoznawane,
+sprawdź instalację i otwórz nowe CMD przed dalszymi krokami.
+
+## 4. Pobierz i wypakuj sklep
+
+1. Na górze tego repozytorium kliknij **Code → Download ZIP**.
+2. W Eksploratorze plików wypakuj ZIP przez **Wyodrębnij wszystkie**.
+3. Folder aplikacji przenieś do `C:\xampp\htdocs` i nazwij **`bytegear`**.
+4. Sprawdź, czy plik `artisan` znajduje się dokładnie tutaj:
+
+```text
+C:\xampp\htdocs\bytegear\artisan
+```
+
+Pliki `composer.json` i `.env.example` też muszą być bezpośrednio w `bytegear`.
+Jeśli jest dodatkowy folder `WSB_Projekt_ByteGear-main`, przenieś jego zawartość o poziom wyżej.
+
+## 5. Zainstaluj Laravel i biblioteki projektu
+
+Wróć do CMD. Wejdź do projektu:
 
 ```cmd
 cd /d C:\xampp\htdocs\bytegear
-set "PATH=C:\xampp\php;%PATH%"
+```
+
+Utwórz plik ustawień. **Jeśli masz już własny `.env`, pomiń kopiowanie i go nie nadpisuj.**
+
+```cmd
+copy .env.example .env
+```
+
+Zainstaluj biblioteki i poczekaj na zakończenie:
+
+```cmd
+composer install
+```
+
+To instaluje również Laravel naszego sklepu. Nie trzeba `laravel new`, Node.js ani npm.
+Prawidłowa pisownia to **`install`**, nie `isntall`.
+
+Sprawdź wymagania:
+
+```cmd
+composer check-platform-reqs
+```
+
+Sprawdź Laravel:
+
+```cmd
+php artisan --version
+```
+
+Oczekiwany wynik: **Laravel Framework 12.x.x**.
+
+- **`ext-gd is missing`**: wróć do kroku 2, włącz GD, zapisz i ponów `composer install`.
+- **Brak `vendor/autoload.php`**: `composer install` nie zakończył się poprawnie. Najpierw napraw jego błąd.
+- Nie wykonuj `composer update` ani pomijania wymagań, żeby obejść te błędy.
+
+## 6. Utwórz bazę i ewentualnie importuj SQL
+
+W przeglądarce otwórz **[phpMyAdmin](http://localhost/phpmyadmin/)**.
+
+1. Kliknij **Nowa**.
+2. Wpisz nazwę **`bytegear`**.
+3. Wybierz porównywanie **`utf8mb4_unicode_ci`**.
+4. Kliknij **Utwórz**.
+
+Jeśli baza `bytegear` już istnieje i zawiera dane, nie kasuj jej.
+Do nowej instalacji utwórz np. `bytegear_pokaz` i wpisz tę nazwę w kolejnym kroku.
+
+**Masz domową kopię `.sql`?** Wybierz pustą bazę po lewej → **Import → Wybierz plik** →
+wskaż `.sql` → **Importuj/Wykonaj**. Poczekaj na komunikat sukcesu.
+
+**Nie masz SQL?** Zostaw pustą bazę i idź dalej. W kroku 9 utworzysz dane przykładowe.
+
+## 7. Ustaw połączenie z bazą
+
+W CMD otwórz plik ustawień:
+
+```cmd
+notepad .env
+```
+
+**Teraz pracujesz w Notatniku, nie w CMD.** Znajdź poniższe linie i popraw ich wartości.
+Resztę pliku zostaw; nie dodawaj wielokrotnie tych samych ustawień.
+
+```dotenv
+APP_URL=http://127.0.0.1:8002
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=bytegear
+DB_USERNAME=root
+DB_PASSWORD=
+SESSION_DRIVER=database
+CACHE_STORE=database
+```
+
+`DB_DATABASE` musi pasować do nazwy bazy z kroku 6. Puste `DB_PASSWORD=` pasuje
+do standardowego XAMPP. Jeśli uczelnia ma inne konto, hasło lub port, użyj właściwych danych.
+
+## 8. Ustaw pocztę lokalną
+
+**W tym samym Notatniku**, w `.env`, sprawdź:
+
+```dotenv
+MAIL_MAILER=smtp
+MAIL_SCHEME=null
+MAIL_HOST=127.0.0.1
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_FROM_ADDRESS="sklep@bytegear.test"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+Zapisz **Ctrl+S** i zamknij Notatnik. Plik ma nazywać się `.env`, nie `.env.txt`.
+
+## 9. Przygotuj klucz i tabele
+
+Wróć do CMD. Na nowej instalacji wygeneruj klucz:
+
+```cmd
+php artisan key:generate
+```
+
+Jeśli przeniosłeś domowy `.env` z istniejącym `APP_KEY`, pomiń to polecenie i zachowaj jego klucz.
+
+Wczytaj ustawienia:
+
+```cmd
+php artisan config:clear
+```
+
+**Wybierz tylko jeden wariant dla bazy:**
+
+**A. Zaimportowałeś domowy SQL:**
+
+```cmd
+php artisan migrate
+```
+
+**B. Masz pustą bazę i chcesz przykładowe konta oraz produkty:**
+
+```cmd
+php artisan migrate --seed
+```
+
+Nie używaj `migrate:fresh` — usuwa istniejące tabele i dane.
+Przy błędzie połączenia sprawdź MySQL w XAMPP oraz ustawienia z kroku 7.
+
+## 10. Uruchom pocztę i sklep
+
+W CMD uruchom pocztę:
+
+```cmd
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools\Start-Mailpit.ps1
+```
+
+To polecenie uruchamia gotowy skrypt z poziomu CMD. Przy pierwszym starcie pobiera Mailpit z Internetu.
+
+Następnie uruchom sklep:
+
+```cmd
 php artisan serve --host=127.0.0.1 --port=8002
 ```
 
-Zostaw terminal otwarty; Ctrl+C zatrzymuje serwer. Apache jest dodatkowo potrzebny do phpMyAdmin.
-Na nowym komputerze wykonaj najpierw PDF instalacji. Przy zwykłym starcie nie kopiuj `.env`,
-nie generuj ponownie klucza i nie resetuj bazy. Nie potrzebujesz Node.js ani npm.
+**Zostaw to okno CMD otwarte.** Ctrl+C zatrzymuje sklep.
 
-Sklep: **http://127.0.0.1:8002/**. Port 8002 pozwala jednocześnie uruchomić ćwiczenia na 8000.
+## 11. Otwórz stronę i zaloguj się
 
-## Konta demonstracyjne
+- **[Sklep](http://127.0.0.1:8002/)**
+- **[Logowanie](http://127.0.0.1:8002/logowanie)**
+- **[Poczta Mailpit](http://127.0.0.1:8025/)** — aktywacje kont, reset hasła i potwierdzenia zamówień
 
 | Rola | E-mail | Hasło |
 |---|---|---|
-| Administrator | admin@example.test | DemoSklep123! |
-| Moderator | moderator@example.test | DemoSklep123! |
 | Klient | customer@example.test | DemoSklep123! |
+| Moderator | moderator@example.test | DemoSklep123! |
+| Administrator | admin@example.test | DemoSklep123! |
 
-Konta są przeznaczone do lokalnej prezentacji. Sklep, ceny i zamówienia mają charakter demonstracyjny;
-nie ma integracji z rzeczywistą płatnością. Seeder tworzy 18 produktów i 6 kategorii.
-Ponowne uruchomienie seedera nie resetuje istniejących kont ani stanów magazynowych.
+Konta demo są aktywowane. Po imporcie domowego SQL obowiązują hasła zapisane w tej kopii,
+także te zmienione ręcznie. Nowe konto potwierdzasz przez link w Mailpit.
+Wiadomości z Mailpit nie trafiają do Gmaila ani innych zewnętrznych skrzynek.
 
-## Zmiana nazwy sklepu
+## Kolejne uruchomienie
 
-W lokalnym `.env` zmień tylko:
+Włącz **MySQL** w XAMPP; Apache także, jeśli chcesz phpMyAdmin.
+Otwórz nowe CMD i wykonaj **każde polecenie osobno**:
 
-```dotenv
-APP_NAME="Moja nowa nazwa"
+```cmd
+cd /d C:\xampp\htdocs\bytegear
 ```
 
-Następnie `php artisan config:clear` i odśwież przeglądarkę.
-Nagłówek, stopka i tytuły stron korzystają z `config('app.name')`. Ilustracje nie mają wpisanej nazwy.
-Dla przyszłych pobrań zmień także `APP_NAME` w `.env.example` i wyślij zmianę do repozytorium.
-Nazwa katalogu, bazy i repozytorium może pozostać taka sama — nie określa marki sklepu.
-Po zmianie nazwy może być potrzebne ponowne logowanie, ponieważ zmienia się nazwa ciasteczka sesji.
+```cmd
+set "PATH=C:\xampp\php;%PATH%"
+```
 
-## Zakres wersji podstawowej
+```cmd
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools\Start-Mailpit.ps1
+```
 
-Katalog z filtrowaniem, sortowaniem i paginacją; szczegóły produktu; koszyk w sesji;
-rejestracja i logowanie; różne ekrany dla trzech ról; CRUD użytkowników dla administratora;
-zarządzanie produktami dla moderatora i administratora; zamówienia i ich statusy.
+```cmd
+php artisan serve --host=127.0.0.1 --port=8002
+```
 
-Ceny są zapisane w groszach. Złożenie zamówienia sprawdza dostępność w transakcji,
-blokuje produkty i zapisuje historyczne nazwy oraz ceny. Wycofanie produktu usuwa go z oferty,
-a historia zamówień pozostaje. Usunięcie użytkownika nie usuwa zamówień.
+Otwórz [sklep](http://127.0.0.1:8002/). Nie kopiuj ponownie `.env`, nie generuj nowego klucza
+i nie importuj ponownie bazy przy zwykłym starcie.
 
-Dodatkowo: polska walidacja, regex dla SKU, kodu pocztowego i hasła, CSRF,
-uprawnienia na serwerze, zapytania parametryzowane i prezentacja ceny EUR z API NBP.
-API nie jest potrzebne do złożenia zamówienia w PLN. Obrazy i CSS są lokalne.
+## Pozostałe instrukcje
 
-## Aktywacja i odzyskiwanie hasła
+- [Prezentacja dla nauczyciela — PDF](output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf)
+- [Drzewko plików HTML, CSS i działania sklepu](MAPA_PLIKOW.md)
+- [Dokładne miejsca w kodzie do obrony](KOD_I_KONFIGURACJA_DO_OBRONY.txt)
+- [Aktualizacja, kopia bazy i własnych zdjęć, zmiana nazwy](docs/AKTUALIZACJA_I_KOPIA.md)
+- [Poczta lokalna i prawdziwy SMTP](POCZTA_SMTP_LUB_MAILPIT.txt)
+- [Zdjęcia produktów](ZDJECIA_PRODUKTOW.txt)
+- [Wymagania zaliczenia](docs/WYMAGANIA.md)
 
-Nowe konta wymagają potwierdzenia adresu przed korzystaniem z panelu i składaniem zamówień.
-Link aktywacyjny ma podpis i ważność 60 minut. Można ponowić wysyłkę.
-Zmiana adresu przez administratora wymaga ponownej aktywacji.
-Trzy konta demonstracyjne z seedera są już aktywne.
-
-Na stronie logowania jest „Nie pamiętam hasła”. Link resetu działa przez 60 minut,
-tylko raz; zmiana hasła unieważnia wcześniejsze sesje. Odpowiedź nie ujawnia,
-czy wskazany adres znajduje się w bazie.
-
-Lokalne wiadomości odbiera [Mailpit](https://mailpit.axllent.org/) — **http://127.0.0.1:8025**.
-Uruchom `powershell -NoProfile -ExecutionPolicy Bypass -File tools\Start-Mailpit.ps1`.
-Skrypt pobiera oficjalny Mailpit 1.31.4 dla Windows x64 i sprawdza SHA256.
-Zostaje zainstalowany poza repozytorium w `C:\xampp\tools\mailpit`.
-Skrzynka jest dostępna tylko lokalnie. Wiadomości nie trafiają do rzeczywistych skrzynek.
-Do wysyłki przez Internet można później podstawić własny serwer SMTP w `.env`.
-Konfiguracja, aktywacja, reset i potwierdzenia: [POCZTA_SMTP_LUB_MAILPIT.txt](POCZTA_SMTP_LUB_MAILPIT.txt).
-
-## Testy i inspiracje
-
-`php artisan test` — osobna baza SQLite w pamięci; nie zmienia MariaDB.
-Testy obejmują uprawnienia, CRUD, sesję koszyka, zamówienia, zapasy, próby manipulowania ceną,
-walidację, hashowanie, CSRF, ucieczkę HTML, ochronę historii i brak dostępu do NBP.
-
-Kategorie i typowe funkcje katalogu inspirowane [x-kom](https://www.x-kom.pl/) i
-[Morele](https://www.morele.net/komputery/klawiatury-i-myszki/). Katalog zawiera własne
-modele demonstracyjne BG i opisy dopasowane do naszych wizualizacji.
-Opisy są własne; ceny i zapasy są przykładami edukacyjnymi. Osiemnaście fotorealistycznych
-wizualizacji AI jest zapisanych lokalnie w public/images/products.
-Są ilustracjami demonstracyjnymi, nie zdjęciami konkretnych modeli producentów.
-Nie pobierano zdjęć z cudzych sklepów.
-[Dokumentacja NBP](https://api.nbp.pl/), [Laravel 12](https://laravel.com/docs/12.x).
+Projekt zaliczeniowy, Laravel 12 / PHP 8.2 / MariaDB. Dane i zakupy są demonstracyjne;
+nie są pobierane prawdziwe płatności.
