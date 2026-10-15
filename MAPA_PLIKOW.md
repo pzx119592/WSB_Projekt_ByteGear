@@ -179,7 +179,8 @@ bytegear/
 │   ├── Start-Mailpit.ps1               ← uruchomienie lokalnej skrzynki e-mail
 │   ├── Optimize-Demo-Images.php        ← przygotowanie lżejszych grafik WebP
 │   ├── Generate-Pdf-Guides.py          ← tworzenie dwóch pierwszych PDF-ów
-│   └── Generate-Beginner-Guide.py      ← tworzenie PDF-a krok po kroku
+│   ├── Generate-Beginner-Guide.py      ← tworzenie PDF-a krok po kroku
+│   └── Generate-Cmd-Setup-Guide.py     ← tworzenie PDF-a instalacji od zera w CMD
 ├── tests/Feature/
 │   ├── ShopTest.php                   ← testy podstawowych funkcji sklepu
 │   ├── AccountSecurityTest.php        ← testy aktywacji, resetu i sesji
