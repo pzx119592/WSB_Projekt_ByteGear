@@ -13,12 +13,14 @@ Osobna aplikacja, repozytorium i baza; wcześniejsze ćwiczenia pozostają w WSB
 
 ## Instrukcje PDF do pobrania
 
+- [Prezentacja krok po kroku dla początkujących](output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf) — 12 stron: co kliknąć, pełne ścieżki plików HTML i CSS, jak znaleźć je w VS Code oraz proste wyjaśnienia do prezentacji.
 - [Uruchomienie sklepu](output/pdf/Uruchomienie_sklepu_ByteGear.pdf) — 4 strony: szybki start, nowy komputer, konfiguracja, aktualizacja i prywatna kopia danych.
 - [Prezentacja projektu](output/pdf/Prezentacja_projektu_ByteGear.pdf) — 10 stron: wszystkie wymagania zaliczenia, działania w przeglądarce, oczekiwane wyniki oraz klikalne pliki i metody w kodzie.
 
 PDF-y zawierają adresy lokalnego sklepu i Mailpit. Linki do kodu otwierają GitHub;
 w VS Code można znaleźć wskazane pliki przez Ctrl+P, a metody przez Ctrl+F.
 Źródło dokumentów: `tools/Generate-Pdf-Guides.py` (ReportLab; niezależne od uruchomienia sklepu).
+Wersję dla początkujących tworzy osobno `tools/Generate-Beginner-Guide.py`.
 
 ## Uruchomienie
 
