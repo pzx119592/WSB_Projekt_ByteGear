@@ -10,6 +10,7 @@ Osobna aplikacja, repozytorium i baza; wcześniejsze ćwiczenia pozostają w WSB
 **Poczta rzeczywista i opcja zapasowa:** [POCZTA_SMTP_LUB_MAILPIT.txt](POCZTA_SMTP_LUB_MAILPIT.txt).
 **Profil, zdjęcia, anulowanie i potwierdzenia:** [NOWE_FUNKCJE_INSTRUKCJA.txt](NOWE_FUNKCJE_INSTRUKCJA.txt).
 **Przegląd wyglądu:** [docs/PRZEGLAD_WYGLADU.md](docs/PRZEGLAD_WYGLADU.md).
+**Drzewko folderów i szybkie szukanie HTML, CSS oraz działania:** [MAPA_PLIKOW.md](MAPA_PLIKOW.md).
 
 ## Instrukcje PDF do pobrania
 
