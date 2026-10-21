@@ -29,6 +29,7 @@ class ProfileController extends Controller
             'email' => $data['email']
         ]);
         if ($emailChanged) {
+            // Nowy adres musi zostać potwierdzony, nawet jeśli poprzedni był aktywny.
             $user->email_verified_at = null;
         }
         $user->save();

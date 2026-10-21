@@ -17,6 +17,7 @@ class VerificationController extends Controller
 
     public function verify(EmailVerificationRequest $request)
     {
+        // Po sprawdzeniu linku zapisujemy datę potwierdzenia adresu e-mail.
         $request->fulfill();
 
         return redirect()->route('dashboard')->with('status', 'Adres e-mail został potwierdzony. Konto jest aktywne.');

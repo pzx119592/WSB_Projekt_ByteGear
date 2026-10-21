@@ -52,11 +52,13 @@ class PasswordController extends Controller
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/s'
             ],
         ]);
+        // Laravel sprawdza ważność tokenu i usuwa go po udanym resecie.
         $status = Password::reset($data, function ($user, $password) {
             $user->forceFill([
                 'password' => Hash::make($password),
                 'remember_token' => Str::random(60)
             ])->save();
+            // Stare zalogowane sesje przestają działać po zmianie hasła.
             if (config('session.driver') === 'database') {
                 DB::table(config('session.table', 'sessions'))->where('user_id', $user->id)->delete();
             }

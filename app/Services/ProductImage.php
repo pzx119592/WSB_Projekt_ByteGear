@@ -12,7 +12,7 @@ class ProductImage
 {
     public function store(UploadedFile $file): string
     {
-        // Ponowne zakodowanie usuwa EXIF i dodatkowe dane doklejone do pliku.
+        // Ponowny zapis usuwa metadane zdjęcia (EXIF) i dodatkowe dane z pliku.
         $image = @imagecreatefromstring(file_get_contents($file->getRealPath()));
         if (! $image) {
             throw ValidationException::withMessages(['image' => 'Zdjęcie jest uszkodzone lub ma nieobsługiwany format.']);

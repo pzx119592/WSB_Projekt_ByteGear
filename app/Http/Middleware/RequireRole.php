@@ -9,6 +9,7 @@ class RequireRole
 {
     public function handle(Request $request, Closure $next, string ...$roles)
     {
+        // Brak dozwolonej roli oznacza odmowę dostępu, także po wpisaniu adresu ręcznie.
         abort_unless($request->user() && in_array($request->user()->role, $roles, true), 403);
 
         return $next($request);

@@ -26,6 +26,7 @@ class OrderMail
 
                 return true;
             } catch (TransportExceptionInterface $exception) {
+                // Błąd poczty nie cofa zakupu; wysyłkę można ponowić później.
                 report($exception);
 
                 return false;
