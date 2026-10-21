@@ -88,6 +88,7 @@ class OrderController extends Controller
         $request->validate(['confirm_cancel' => 'required|accepted']);
         DB::transaction(function () use ($order) {
             $locked = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
+            // Sprawdzenie statusu pod blokadą zapobiega dwukrotnemu zwrotowi towaru do magazynu.
             if ($locked->status === 'cancelled') {
                 return;
             }

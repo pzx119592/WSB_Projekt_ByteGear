@@ -35,6 +35,7 @@ class CatalogController extends Controller
         ]);
         $query = Product::with('category')->where('active', true);
         if (! empty($filters['q'])) {
+            // Eloquent przekazuje tekst jako parametr zapytania, chroniąc przed SQL Injection.
             $query->where('name', 'like', '%'.$filters['q'].'%');
         }
         if (! empty($filters['category'])) {
