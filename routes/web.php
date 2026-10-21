@@ -12,45 +12,102 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [CatalogController::class, 'index'])->name('catalog');
-Route::get('/produkty/{product}', [CatalogController::class, 'show'])->name('products.show');
-Route::get('/produkty/{product}/euro', [CatalogController::class, 'euro'])->name('products.euro');
-Route::get('/produkty/{product}/zdjecie', [CatalogController::class, 'image'])->name('products.image');
-Route::get('/koszyk', [CartController::class, 'index'])->name('cart');
-Route::post('/koszyk/{product}', [CartController::class, 'add'])->name('cart.add')->block();
-Route::patch('/koszyk/{product}', [CartController::class, 'update'])->name('cart.update')->block();
-Route::delete('/koszyk/{product}', [CartController::class, 'destroy'])->name('cart.destroy')->block();
+// Katalog i koszyk są dostępne także bez logowania.
+Route::get('/', [CatalogController::class, 'index'])
+    ->name('catalog');
+Route::get('/produkty/{product}', [CatalogController::class, 'show'])
+    ->name('products.show');
+Route::get('/produkty/{product}/euro', [CatalogController::class, 'euro'])
+    ->name('products.euro');
+Route::get('/produkty/{product}/zdjecie', [CatalogController::class, 'image'])
+    ->name('products.image');
+Route::get('/koszyk', [CartController::class, 'index'])
+    ->name('cart');
+Route::post('/koszyk/{product}', [CartController::class, 'add'])
+    ->name('cart.add')
+    ->block();
+Route::patch('/koszyk/{product}', [CartController::class, 'update'])
+    ->name('cart.update')
+    ->block();
+Route::delete('/koszyk/{product}', [CartController::class, 'destroy'])
+    ->name('cart.destroy')
+    ->block();
+
+// Formularze dla osób niezalogowanych.
 Route::middleware('guest')->group(function () {
-    Route::get('/logowanie', [AuthController::class, 'loginForm'])->name('login');
-    Route::post('/logowanie', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('login.store');
-    Route::get('/rejestracja', [AuthController::class, 'registerForm'])->name('register');
-    Route::post('/rejestracja', [AuthController::class, 'register'])->middleware('throttle:10,1')->name('register.store');
-    Route::get('/zapomniane-haslo', [PasswordController::class, 'request'])->name('password.request');
-    Route::post('/zapomniane-haslo', [PasswordController::class, 'email'])->middleware('throttle:5,1')->name('password.email');
-    Route::get('/nowe-haslo/{token}', [PasswordController::class, 'form'])->name('password.reset');
-    Route::post('/nowe-haslo', [PasswordController::class, 'update'])->middleware('throttle:10,1')->name('password.update');
+    Route::get('/logowanie', [AuthController::class, 'loginForm'])
+        ->name('login');
+    Route::post('/logowanie', [AuthController::class, 'login'])
+        ->middleware('throttle:10,1')
+        ->name('login.store');
+    Route::get('/rejestracja', [AuthController::class, 'registerForm'])
+        ->name('register');
+    Route::post('/rejestracja', [AuthController::class, 'register'])
+        ->middleware('throttle:10,1')
+        ->name('register.store');
+    Route::get('/zapomniane-haslo', [PasswordController::class, 'request'])
+        ->name('password.request');
+    Route::post('/zapomniane-haslo', [PasswordController::class, 'email'])
+        ->middleware('throttle:5,1')
+        ->name('password.email');
+    Route::get('/nowe-haslo/{token}', [PasswordController::class, 'form'])
+        ->name('password.reset');
+    Route::post('/nowe-haslo', [PasswordController::class, 'update'])
+        ->middleware('throttle:10,1')
+        ->name('password.update');
 });
+
+// Profil i potwierdzenie adresu wymagają zalogowania.
 Route::middleware('auth')->group(function () {
-    Route::get('/profil', [ProfileController::class, 'edit'])->middleware('auth.session')->name('profile.edit');
-    Route::patch('/profil', [ProfileController::class, 'update'])->middleware(['auth.session', 'throttle:10,1'])->name('profile.update');
-    Route::put('/profil/haslo', [ProfileController::class, 'password'])->middleware(['auth.session', 'throttle:5,1'])->name('profile.password');
-    Route::post('/wyloguj', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/potwierdz-email', [VerificationController::class, 'notice'])->name('verification.notice');
-    Route::get('/potwierdz-email/{id}/{hash}', [VerificationController::class, 'verify'])->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
-    Route::post('/wyslij-aktywacje', [VerificationController::class, 'send'])->middleware('throttle:3,1')->name('verification.send');
+    Route::get('/profil', [ProfileController::class, 'edit'])
+        ->middleware('auth.session')
+        ->name('profile.edit');
+    Route::patch('/profil', [ProfileController::class, 'update'])
+        ->middleware(['auth.session', 'throttle:10,1'])
+        ->name('profile.update');
+    Route::put('/profil/haslo', [ProfileController::class, 'password'])
+        ->middleware(['auth.session', 'throttle:5,1'])
+        ->name('profile.password');
+    Route::post('/wyloguj', [AuthController::class, 'logout'])
+        ->name('logout');
+    Route::get('/potwierdz-email', [VerificationController::class, 'notice'])
+        ->name('verification.notice');
+    Route::get('/potwierdz-email/{id}/{hash}', [VerificationController::class, 'verify'])
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
+    Route::post('/wyslij-aktywacje', [VerificationController::class, 'send'])
+        ->middleware('throttle:3,1')
+        ->name('verification.send');
 });
+
+// Zakupy i panele wymagają także aktywowanego adresu e-mail.
 Route::middleware(['auth', 'auth.session', 'verified'])->group(function () {
-    Route::get('/konto', [OrderController::class, 'dashboard'])->name('dashboard');
-    Route::get('/zamowienie', [OrderController::class, 'checkout'])->name('checkout');
-    Route::post('/zamowienie', [OrderController::class, 'store'])->name('checkout.store')->block(10, 10);
-    Route::get('/zamowienia', [OrderController::class, 'index'])->name('orders.index');
-    Route::get('/zamowienia/{order}', [OrderController::class, 'show'])->name('orders.show');
-    Route::patch('/zamowienia/{order}/anuluj', [OrderController::class, 'cancel'])->name('orders.cancel')->block(10, 10);
-    Route::post('/zamowienia/{order}/potwierdzenie', [OrderController::class, 'confirmation'])->middleware('throttle:3,1')->name('orders.confirmation')->block(10, 10);
+    Route::get('/konto', [OrderController::class, 'dashboard'])
+        ->name('dashboard');
+    Route::get('/zamowienie', [OrderController::class, 'checkout'])
+        ->name('checkout');
+    Route::post('/zamowienie', [OrderController::class, 'store'])
+        ->name('checkout.store')
+        ->block(10, 10);
+    Route::get('/zamowienia', [OrderController::class, 'index'])
+        ->name('orders.index');
+    Route::get('/zamowienia/{order}', [OrderController::class, 'show'])
+        ->name('orders.show');
+    Route::patch('/zamowienia/{order}/anuluj', [OrderController::class, 'cancel'])
+        ->name('orders.cancel')
+        ->block(10, 10);
+    Route::post('/zamowienia/{order}/potwierdzenie', [OrderController::class, 'confirmation'])
+        ->middleware('throttle:3,1')
+        ->name('orders.confirmation')
+        ->block(10, 10);
     Route::prefix('panel')->name('admin.')->middleware('role:admin,moderator')->group(function () {
-        Route::resource('products', AdminProductController::class)->except('show');
-        Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
-        Route::patch('/orders/{order}', [AdminOrderController::class, 'update'])->name('orders.update');
-        Route::resource('users', AdminUserController::class)->middleware('role:admin');
+        Route::resource('products', AdminProductController::class)
+            ->except('show');
+        Route::get('/orders', [AdminOrderController::class, 'index'])
+            ->name('orders.index');
+        Route::patch('/orders/{order}', [AdminOrderController::class, 'update'])
+            ->name('orders.update');
+        Route::resource('users', AdminUserController::class)
+            ->middleware('role:admin');
     });
 });

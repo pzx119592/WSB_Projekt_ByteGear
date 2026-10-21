@@ -10,20 +10,19 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Rejestracja dodatkowych usług aplikacji.
      */
     public function register(): void
     {
-        //
     }
 
     /**
-     * Bootstrap any application services.
+     * Polskie wiadomości aktywacji i resetu hasła.
      */
     public function boot(): void
     {
         VerifyEmail::toMailUsing(function ($user, $url) {
-            return (new MailMessage)
+            return (new MailMessage())
                 ->subject('Aktywacja konta — '.config('app.name'))
                 ->greeting('Cześć, '.$user->name.'!')
                 ->line('Potwierdź swój adres e-mail, aby aktywować konto w '.config('app.name').'.')
@@ -32,9 +31,12 @@ class AppServiceProvider extends ServiceProvider
                 ->salutation('Pozdrawiamy, '.config('app.name'));
         });
         ResetPassword::toMailUsing(function ($user, $token) {
-            $url = route('password.reset', ['token' => $token, 'email' => $user->email]);
+            $url = route('password.reset', [
+                'token' => $token,
+                'email' => $user->email
+            ]);
 
-            return (new MailMessage)
+            return (new MailMessage())
                 ->subject('Zmiana hasła — '.config('app.name'))
                 ->greeting('Cześć, '.$user->name.'!')
                 ->line('Otrzymaliśmy prośbę o zmianę hasła do Twojego konta.')

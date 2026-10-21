@@ -8,7 +8,9 @@ use Illuminate\Notifications\Notification;
 
 class OrderConfirmation extends Notification
 {
-    public function __construct(public Order $order) {}
+    public function __construct(public Order $order)
+    {
+    }
 
     public function via(object $notifiable): array
     {
@@ -17,7 +19,7 @@ class OrderConfirmation extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)->subject('Potwierdzenie zamówienia #'.$this->order->id.' — '.config('app.name'))
+        return (new MailMessage())->subject('Potwierdzenie zamówienia #'.$this->order->id.' — '.config('app.name'))
             ->view('mail.order-confirmation', ['order' => $this->order->loadMissing('items')]);
     }
 }

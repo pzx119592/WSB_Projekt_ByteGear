@@ -6,13 +6,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    public const STATUSES = ['new' => 'Nowe', 'processing' => 'W realizacji', 'completed' => 'Zrealizowane', 'cancelled' => 'Anulowane'];
+    public const STATUSES = [
+        'new' => 'Nowe',
+        'processing' => 'W realizacji',
+        'completed' => 'Zrealizowane',
+        'cancelled' => 'Anulowane'
+    ];
 
-    protected $fillable = ['user_id', 'checkout_token', 'name', 'email', 'address', 'postcode', 'city', 'status', 'total_grosze'];
+    protected $fillable = [
+        'user_id',
+        'checkout_token',
+        'name',
+        'email',
+        'address',
+        'postcode',
+        'city',
+        'status',
+        'total_grosze'
+    ];
 
     protected function casts(): array
     {
-        return ['total_grosze' => 'integer', 'cancelled_at' => 'datetime', 'confirmation_sent_at' => 'datetime'];
+        return [
+            'total_grosze' => 'integer',
+            'cancelled_at' => 'datetime',
+            'confirmation_sent_at' => 'datetime'
+        ];
     }
 
     public function items()

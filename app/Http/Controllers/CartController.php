@@ -11,12 +11,16 @@ class CartController extends Controller
 {
     public function index(Cart $cart)
     {
-        return view('cart', ['rows' => $cart->rows(), 'total' => $cart->total()]);
+        return view('cart', [
+            'rows' => $cart->rows(),
+            'total' => $cart->total()
+        ]);
     }
 
     public function add(Request $request, Product $product)
     {
         $data = $request->validate(['quantity' => 'required|integer|min:1|max:99']);
+        // Sesja przechowuje identyfikatory produktów i liczbę sztuk.
         $cart = $request->session()->get('cart', []);
         $quantity = ($cart[$product->id] ?? 0) + $data['quantity'];
         $this->check($product, $quantity);

@@ -14,7 +14,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * Pola, które można zapisywać przez model użytkownika.
      *
      * @var list<string>
      */
@@ -26,7 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Dane pomijane przy zwracaniu użytkownika jako JSON.
      *
      * @var list<string>
      */
@@ -36,7 +36,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * Hasło jest hashowane, a data aktywacji odczytywana jako data.
      *
      * @return array<string, string>
      */

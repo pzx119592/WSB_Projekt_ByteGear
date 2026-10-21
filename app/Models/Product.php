@@ -6,7 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['category_id', 'name', 'sku', 'description', 'price_grosze', 'stock', 'active', 'image_path'];
+    protected $fillable = [
+        'category_id',
+        'name',
+        'sku',
+        'description',
+        'price_grosze',
+        'stock',
+        'active',
+        'image_path'
+    ];
 
     public function imagePath(): string
     {
@@ -26,7 +35,11 @@ class Product extends Model
 
     protected function casts(): array
     {
-        return ['active' => 'boolean', 'price_grosze' => 'integer', 'stock' => 'integer'];
+        return [
+            'active' => 'boolean',
+            'price_grosze' => 'integer',
+            'stock' => 'integer'
+        ];
     }
 
     public function category()

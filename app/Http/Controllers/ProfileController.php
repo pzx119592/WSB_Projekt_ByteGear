@@ -24,7 +24,10 @@ class ProfileController extends Controller
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'current_password' => [$emailChanged ? 'required' : 'nullable', 'current_password:web'],
         ]);
-        $user->fill(['name' => $data['name'], 'email' => $data['email']]);
+        $user->fill([
+            'name' => $data['name'],
+            'email' => $data['email']
+        ]);
         if ($emailChanged) {
             $user->email_verified_at = null;
         }
@@ -44,10 +47,21 @@ class ProfileController extends Controller
     {
         $data = $request->validate([
             'current_password' => 'required|current_password:web',
-            'password' => ['required', 'string', 'min:8', 'max:72', 'confirmed', 'different:current_password', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/s'],
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'max:72',
+                'confirmed',
+                'different:current_password',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/s'
+            ],
         ]);
         $user = $request->user();
-        $user->forceFill(['password' => $data['password'], 'remember_token' => Str::random(60)])->save();
+        $user->forceFill([
+            'password' => $data['password'],
+            'remember_token' => Str::random(60)
+        ])->save();
         $request->session()->regenerate();
         $request->session()->put('password_hash_web', $user->password);
         if (config('session.driver') === 'database') {

@@ -80,9 +80,17 @@ class AdminUserController extends Controller
     private function data(Request $request, ?User $user = null): array
     {
         $data = $request->validate([
-            'name' => 'required|string|min:3|max:100', 'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user)],
+            'name' => 'required|string|min:3|max:100',
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user)],
             'role' => 'required|in:customer,moderator,admin',
-            'password' => [$user ? 'nullable' : 'required', 'string', 'min:8', 'max:72', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/s'],
+            'password' => [
+                $user ? 'nullable' : 'required',
+                'string',
+                'min:8',
+                'max:72',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/s'
+            ],
         ]);
         if (empty($data['password'])) {
             unset($data['password']);

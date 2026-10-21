@@ -17,16 +17,21 @@ class CatalogController extends Controller
         abort_unless($product->image_path && Storage::disk('local')->exists($product->image_path), 404);
 
         return response()->file(Storage::disk('local')->path($product->image_path), [
-            'Content-Type' => 'image/jpeg', 'X-Content-Type-Options' => 'nosniff', 'Cache-Control' => 'public, max-age=0, must-revalidate',
+            'Content-Type' => 'image/jpeg',
+            'X-Content-Type-Options' => 'nosniff',
+            'Cache-Control' => 'public, max-age=0, must-revalidate',
         ]);
     }
 
     public function index(Request $request)
     {
         $filters = $request->validate([
-            'q' => 'nullable|string|max:100', 'category' => 'nullable|integer|exists:categories,id',
-            'sort' => 'nullable|in:new,price_asc,price_desc,name', 'available' => 'nullable|in:1',
-            'min' => 'nullable|numeric|min:0|max:1000000', 'max' => 'nullable|numeric|min:0|max:1000000',
+            'q' => 'nullable|string|max:100',
+            'category' => 'nullable|integer|exists:categories,id',
+            'sort' => 'nullable|in:new,price_asc,price_desc,name',
+            'available' => 'nullable|in:1',
+            'min' => 'nullable|numeric|min:0|max:1000000',
+            'max' => 'nullable|numeric|min:0|max:1000000',
         ]);
         $query = Product::with('category')->where('active', true);
         if (! empty($filters['q'])) {
@@ -44,13 +49,18 @@ class CatalogController extends Controller
         if (isset($filters['max'])) {
             $query->where('price_grosze', '<=', round($filters['max'] * 100));
         }
+        // Kolumnę sortowania wybieramy tylko z dozwolonej listy.
         [$column, $direction] = match ($filters['sort'] ?? 'new') {
-            'price_asc' => ['price_grosze', 'asc'], 'price_desc' => ['price_grosze', 'desc'],
-            'name' => ['name', 'asc'], default => ['id', 'desc'],
+            'price_asc' => ['price_grosze', 'asc'],
+            'price_desc' => ['price_grosze', 'desc'],
+            'name' => ['name', 'asc'],
+            default => ['id', 'desc'],
         };
 
-        return view('catalog.index', ['products' => $query->orderBy($column, $direction)->paginate(12)->withQueryString(),
-            'categories' => Category::orderBy('id')->get()]);
+        return view('catalog.index', [
+            'products' => $query->orderBy($column, $direction)->paginate(12)->withQueryString(),
+            'categories' => Category::orderBy('id')->get()
+        ]);
     }
 
     public function show(Product $product)
@@ -71,11 +81,18 @@ class CatalogController extends Controller
                 throw new \RuntimeException('Brak kursu EUR');
             }
 
-            return view('catalog.euro', ['product' => $product, 'rate' => $rate, 'euro' => $product->price_grosze / 100 / $mid]);
+            return view('catalog.euro', [
+                'product' => $product,
+                'rate' => $rate,
+                'euro' => $product->price_grosze / 100 / $mid
+            ]);
         } catch (ConnectionException|RequestException|\RuntimeException $exception) {
             report($exception);
 
-            return view('catalog.euro', ['product' => $product, 'error' => 'Kurs EUR jest chwilowo niedostępny. Cena i zamówienia w PLN działają normalnie.']);
+            return view('catalog.euro', [
+                'product' => $product,
+                'error' => 'Kurs EUR jest chwilowo niedostępny. Cena i zamówienia w PLN działają normalnie.'
+            ]);
         }
     }
 }

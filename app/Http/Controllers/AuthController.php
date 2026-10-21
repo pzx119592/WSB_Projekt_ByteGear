@@ -22,9 +22,18 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|min:3|max:100', 'email' => 'required|email|max:255|unique:users',
-            'password' => ['required', 'string', 'min:8', 'max:72', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/s'],
+            'name' => 'required|string|min:3|max:100',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'max:72',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/s'
+            ],
         ]);
+        // Rejestracja zawsze tworzy klienta, niezależnie od danych formularza.
         $data['role'] = 'customer';
         $user = User::create($data);
         $sent = app(AccountMail::class)->verify($user);
@@ -36,7 +45,10 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $data = $request->validate(['email' => 'required|email', 'password' => 'required|string']);
+        $data = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string'
+        ]);
         if (! Auth::attempt($data)) {
             return back()->withErrors(['email' => 'Nieprawidłowy e-mail lub hasło.'])->onlyInput('email');
         }

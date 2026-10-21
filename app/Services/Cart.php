@@ -11,7 +11,8 @@ class Cart
         $cart = session('cart', []);
 
         return Product::with('category')->whereIn('id', array_keys($cart))->get()->map(fn ($product) => [
-            'product' => $product, 'quantity' => (int) $cart[$product->id],
+            'product' => $product,
+            'quantity' => (int) $cart[$product->id],
             'subtotal' => $product->price_grosze * (int) $cart[$product->id],
         ])->all();
     }

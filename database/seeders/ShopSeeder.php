@@ -11,17 +11,31 @@ class ShopSeeder extends Seeder
 {
     public function run(): void
     {
-        foreach (['admin' => 'Administrator', 'moderator' => 'Moderator', 'customer' => 'Klient Demo'] as $role => $name) {
-            $demo = User::firstOrCreate(['email' => $role.'@example.test'], ['name' => $name, 'role' => $role, 'password' => 'DemoSklep123!']);
+        foreach ([
+            'admin' => 'Administrator',
+            'moderator' => 'Moderator',
+            'customer' => 'Klient Demo'
+        ] as $role => $name) {
+            $demo = User::firstOrCreate(['email' => $role.'@example.test'], [
+                'name' => $name,
+                'role' => $role,
+                'password' => 'DemoSklep123!'
+            ]);
             // Tylko trzy konta demonstracyjne omijają aktywację; nowe konta wymagają e-maila.
             if (! $demo->hasVerifiedEmail()) {
                 $demo->markEmailAsVerified();
             }
         }
         $groups = [
-            'keyboard' => ['Klawiatury', [['BG K75 Mechanical', 24990], ['BG K120 Silent', 15990], ['BG K87 TKL', 34990]]],
+            'keyboard' => [
+                'Klawiatury',
+                [['BG K75 Mechanical', 24990], ['BG K120 Silent', 15990], ['BG K87 TKL', 34990]]
+            ],
             'mouse' => ['Myszy', [['BG M100 Wireless', 11990], ['BG M200 Gaming', 22990], ['BG Ergo V1', 17990]]],
-            'headset' => ['Słuchawki', [['BG H100 Studio', 19990], ['BG H200 Wireless', 29990], ['BG H300 Gaming', 14990]]],
+            'headset' => [
+                'Słuchawki',
+                [['BG H100 Studio', 19990], ['BG H200 Wireless', 29990], ['BG H300 Gaming', 14990]]
+            ],
             'monitor' => ['Monitory', [['BG V24 IPS', 54990], ['BG V27 QHD', 99990], ['BG V27 Gaming', 84990]]],
             'pad' => ['Podkładki', [['BG DeskMat XL', 6990], ['BG MousePad S', 3990], ['BG DeskMat Pro', 9990]]],
             'usb' => ['Akcesoria USB', [['BG Hub C5', 12990], ['BG Dock C7', 24990], ['BG Cable C100 1m', 4990]]],
@@ -50,8 +64,12 @@ class ShopSeeder extends Seeder
             $category = Category::firstOrCreate(['slug' => $slug], ['name' => $name]);
             foreach ($products as $index => [$title, $price]) {
                 Product::firstOrCreate(['sku' => strtoupper($slug).'-'.($index + 1)], [
-                    'category_id' => $category->id, 'name' => $title, 'description' => $descriptions[strtoupper($slug).'-'.($index + 1)],
-                    'price_grosze' => $price, 'stock' => 12 + $index * 3, 'active' => true,
+                    'category_id' => $category->id,
+                    'name' => $title,
+                    'description' => $descriptions[strtoupper($slug).'-'.($index + 1)],
+                    'price_grosze' => $price,
+                    'stock' => 12 + $index * 3,
+                    'active' => true,
                 ]);
             }
         }

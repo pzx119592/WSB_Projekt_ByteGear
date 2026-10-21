@@ -32,17 +32,31 @@ class PasswordController extends Controller
 
     public function form(Request $request, string $token)
     {
-        return view('auth.reset-password', ['token' => $token, 'email' => $request->query('email', '')]);
+        return view('auth.reset-password', [
+            'token' => $token,
+            'email' => $request->query('email', '')
+        ]);
     }
 
     public function update(Request $request)
     {
         $data = $request->validate([
-            'token' => 'required|string', 'email' => 'required|email|max:255',
-            'password' => ['required', 'string', 'min:8', 'max:72', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/s'],
+            'token' => 'required|string',
+            'email' => 'required|email|max:255',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'max:72',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/s'
+            ],
         ]);
         $status = Password::reset($data, function ($user, $password) {
-            $user->forceFill(['password' => Hash::make($password), 'remember_token' => Str::random(60)])->save();
+            $user->forceFill([
+                'password' => Hash::make($password),
+                'remember_token' => Str::random(60)
+            ])->save();
             if (config('session.driver') === 'database') {
                 DB::table(config('session.table', 'sessions'))->where('user_id', $user->id)->delete();
             }

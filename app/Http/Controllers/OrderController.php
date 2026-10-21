@@ -20,14 +20,19 @@ class OrderController extends Controller
         }
         $request->session()->put('checkout_token', $request->session()->get('checkout_token', (string) Str::uuid()));
 
-        return view('checkout', ['rows' => $cart->rows(), 'total' => $cart->total()]);
+        return view('checkout', [
+            'rows' => $cart->rows(),
+            'total' => $cart->total()
+        ]);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|min:3|max:100', 'address' => 'required|string|min:5|max:200',
-            'postcode' => ['required', 'regex:/^[0-9]{2}-[0-9]{3}$/'], 'city' => 'required|string|min:2|max:100',
+            'name' => 'required|string|min:3|max:100',
+            'address' => 'required|string|min:5|max:200',
+            'postcode' => ['required', 'regex:/^[0-9]{2}-[0-9]{3}$/'],
+            'city' => 'required|string|min:2|max:100',
             'checkout_token' => 'required|uuid',
         ]);
         if ($data['checkout_token'] !== $request->session()->get('checkout_token')) {
@@ -37,6 +42,7 @@ class OrderController extends Controller
         if (! $cart) {
             throw ValidationException::withMessages(['order' => 'Koszyk jest pusty.']);
         }
+        // Błąd podczas zakupu wycofuje zapis zamówienia i zmianę magazynu.
         $order = DB::transaction(function () use ($request, $data, $cart) {
             // Stała kolejność blokowania zapobiega zakleszczeniom między zamówieniami.
             $products = Product::whereIn('id', array_keys($cart))->orderBy('id')->lockForUpdate()->get()->keyBy('id');
@@ -48,10 +54,20 @@ class OrderController extends Controller
                 }
                 $total += $product->price_grosze * $quantity;
             }
-            $order = Order::create($data + ['user_id' => $request->user()->id, 'email' => $request->user()->email, 'total_grosze' => $total]);
+            $order = Order::create($data + [
+                'user_id' => $request->user()->id,
+                'email' => $request->user()->email,
+                'total_grosze' => $total
+            ]);
             foreach ($cart as $id => $quantity) {
                 $product = $products[$id];
-                $order->items()->create(['product_id' => $id, 'name' => $product->name, 'price_grosze' => $product->price_grosze, 'quantity' => $quantity]);
+                // Historia zachowuje nazwę i cenę z chwili zakupu.
+                $order->items()->create([
+                    'product_id' => $id,
+                    'name' => $product->name,
+                    'price_grosze' => $product->price_grosze,
+                    'quantity' => $quantity
+                ]);
                 $product->decrement('stock', $quantity);
             }
 
@@ -83,7 +99,10 @@ class OrderController extends Controller
             foreach ($products as $product) {
                 $product->increment('stock', $items[$product->id]->sum('quantity'));
             }
-            $locked->forceFill(['status' => 'cancelled', 'cancelled_at' => now()])->save();
+            $locked->forceFill([
+                'status' => 'cancelled',
+                'cancelled_at' => now()
+            ])->save();
         }, 3);
 
         return back()->with('status', 'Zamówienie anulowane. Produkty wróciły do magazynu.');

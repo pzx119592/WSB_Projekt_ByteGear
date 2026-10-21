@@ -18,7 +18,10 @@ class AdminProductController extends Controller
 
     public function create()
     {
-        return $this->form(new Product(['stock' => 0, 'active' => true]));
+        return $this->form(new Product([
+            'stock' => 0,
+            'active' => true
+        ]));
     }
 
     public function edit(Product $product)
@@ -28,7 +31,10 @@ class AdminProductController extends Controller
 
     private function form(Product $product)
     {
-        return view('admin.products.form', ['product' => $product, 'categories' => Category::all()]);
+        return view('admin.products.form', [
+            'product' => $product,
+            'categories' => Category::all()
+        ]);
     }
 
     public function store(Request $request)
@@ -72,6 +78,7 @@ class AdminProductController extends Controller
 
     public function destroy(Product $product)
     {
+        // Wycofanie z oferty zachowuje produkt dla historii zamówień.
         $product->update(['active' => false]);
 
         return back()->with('status', 'Produkt wycofany ze sprzedaży. Możesz przywrócić go przez edycję.');
@@ -80,10 +87,19 @@ class AdminProductController extends Controller
     private function data(Request $request, ?Product $product = null): array
     {
         $data = $request->validate([
-            'name' => 'required|string|min:3|max:150', 'category_id' => 'required|exists:categories,id',
-            'sku' => ['required', 'string', 'max:40', 'regex:/^[A-Z0-9-]+$/', Rule::unique('products')->ignore($product)],
-            'description' => 'required|string|min:10|max:5000', 'price' => 'required|numeric|decimal:0,2|gt:0|max:1000000',
-            'stock' => 'required|integer|min:0|max:10000', 'active' => 'nullable|boolean',
+            'name' => 'required|string|min:3|max:150',
+            'category_id' => 'required|exists:categories,id',
+            'sku' => [
+                'required',
+                'string',
+                'max:40',
+                'regex:/^[A-Z0-9-]+$/',
+                Rule::unique('products')->ignore($product)
+            ],
+            'description' => 'required|string|min:10|max:5000',
+            'price' => 'required|numeric|decimal:0,2|gt:0|max:1000000',
+            'stock' => 'required|integer|min:0|max:10000',
+            'active' => 'nullable|boolean',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096|dimensions:min_width=160,min_height=160,max_width=4096,max_height=4096|prohibited_if:remove_image,1',
             'remove_image' => 'nullable|boolean',
         ]);
