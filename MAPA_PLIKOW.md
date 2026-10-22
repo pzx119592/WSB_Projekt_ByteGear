@@ -59,7 +59,7 @@ bytegear/
 `resources/views/catalog/index.blade.php` i szukasz `Małe zmiany.`.
 Chcesz zmienić jego rozmiar — w `public/css/shop.css` szukasz `.hero h1`.
 Chcesz zmienić menu — otwierasz `resources/views/layouts/app.blade.php` i szukasz `<nav`.
-Jeśli CSS jest w długich liniach, **Alt+Z** w VS Code włącza zawijanie tekstu.
+CSS jest już rozpisany na czytelne bloki. **Alt+Z** w VS Code dodatkowo włącza zawijanie długich linii.
 
 ## 2. Działanie sklepu — co się dzieje po kliknięciu
 
@@ -208,7 +208,7 @@ bytegear/
 | Sprawdzenie loginu i hasła | [AuthController.php](app/Http/Controllers/AuthController.php) | `function login`, `Auth::attempt` |
 | HTML rejestracji | [register.blade.php](resources/views/auth/register.blade.php) | `<form` |
 | Zabezpieczenie hasła w bazie | [User.php](app/Models/User.php) | `'password' => 'hashed'` |
-| Dane kont demonstracyjnych | [ShopSeeder.php](database/seeders/ShopSeeder.php) | `admin@example.test`, `DemoSklep123!` |
+| Dane kont demonstracyjnych | [ShopSeeder.php](database/seeders/ShopSeeder.php) | `@example.test`, `DemoSklep123!` — adres powstaje z roli, np. admin, i końcówki @example.test |
 | Kontrolę roli | [RequireRole.php](app/Http/Middleware/RequireRole.php) | `403` |
 | Różne strony po zalogowaniu | [OrderController.php](app/Http/Controllers/OrderController.php) | `function dashboard` |
 | Listę użytkowników — HTML | [admin/users/index.blade.php](resources/views/admin/users/index.blade.php) | `Użytkownicy` |
