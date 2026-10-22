@@ -275,7 +275,7 @@ i nie importuj ponownie bazy przy zwykłym starcie.
 
 - [Prezentacja dla nauczyciela — PDF](output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf)
 - [Drzewko plików HTML, CSS i działania sklepu](MAPA_PLIKOW.md)
-- [Dokładne miejsca w kodzie do obrony](KOD_I_KONFIGURACJA_DO_OBRONY.txt)
+- [Dokładne miejsca w kodzie do obrony](KOD_I_KONFIGURACJA_DO_OBRONY.md)
 - [Aktualizacja, kopia bazy i własnych zdjęć, zmiana nazwy](docs/AKTUALIZACJA_I_KOPIA.md)
 - [Poczta lokalna i prawdziwy SMTP](POCZTA_SMTP_LUB_MAILPIT.txt)
 - [Zdjęcia produktów](ZDJECIA_PRODUKTOW.txt)

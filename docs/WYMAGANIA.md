@@ -3,7 +3,7 @@
 Scenariusz pokazania tych punktów w przeglądarce:
 [Prezentacja krok po kroku — PDF](../output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf).
 Szczegółowe metody i wyjaśnienia:
-[KOD_I_KONFIGURACJA_DO_OBRONY.txt](../KOD_I_KONFIGURACJA_DO_OBRONY.txt).
+[Kod i konfiguracja do obrony](../KOD_I_KONFIGURACJA_DO_OBRONY.md).
 
 | Wymaganie | Realizacja |
 |---|---|

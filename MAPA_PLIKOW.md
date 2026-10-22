@@ -170,7 +170,7 @@ Migracje opisują strukturę, a seeder dostarcza dane przykładowe.
 bytegear/
 ├── MAPA_PLIKOW.md                      ← czytasz właśnie tę ściągę
 ├── README.md                          ← opis projektu i odnośniki do instrukcji
-├── KOD_I_KONFIGURACJA_DO_OBRONY.txt     ← dokładniejsze wyjaśnienia kodu
+├── KOD_I_KONFIGURACJA_DO_OBRONY.md      ← czytelny poradnik: pliki i kod do obrony
 ├── POCZTA_SMTP_LUB_MAILPIT.txt          ← poczta, aktywacja i reset
 ├── ZDJECIA_PRODUKTOW.txt               ← grafiki, własne zdjęcia i limity
 ├── output/pdf/
