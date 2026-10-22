@@ -4,6 +4,9 @@ JAK KORZYSTAĆ
 Otwórz cały folder C:\xampp\htdocs\bytegear w Visual Studio Code.
 Ctrl+P -> wklej ścieżkę podaną poniżej -> Enter.
 Ctrl+F -> wpisz podaną metodę lub fragment kodu.
+Nazwy metod zapisane np. login() albo Auth::attempt() są skrótem opisu.
+Do Ctrl+F wpisuj login lub Auth::attempt, bez nawiasów; w kodzie mogą mieć argumenty.
+Przykłady z ... też są skrótem, nie dosłownym tekstem do wyszukania.
 Ścieżki są względem folderu projektu. Metody są pewniejsze niż numery linii,
 które mogą się zmieniać po aktualizacjach. Czytaj wyjaśnienia i przećwicz je.
 Scenariusz przeglądarki: output/pdf/Prezentacja_krok_po_kroku_ByteGear.pdf.
@@ -30,6 +33,8 @@ Wyjaśnienie: migracje opisują strukturę bazy; php artisan migrate ją tworzy.
 Klucze obce łączą produkty z kategoriami i zamówienia z użytkownikami/pozycjami.
 Seeder to dane początkowe: database/seeders/ShopSeeder.php -> run().
 Konta demo i 18 produktów są odtwarzane poleceniem php artisan migrate --seed.
+Na pustej bazie tworzy to dane przykładowe; nie jest importem Twoich domowych zamówień.
+Ponowne seedowanie nie resetuje istniejących kont ani stanów magazynowych.
 Nie używaj migrate:fresh podczas obrony — usuwa dane.
 
 3. „GDZIE SĄ ADRESY STRON?”
@@ -55,6 +60,13 @@ Relacje: Category::products(), Product::category(), Order::items()/user(),
 OrderItem::order(). Laravel domyślnie wiąże np. Product z tabelą products.
 
 5. „GDZIE JEST HTML I CSS?”
+HTML strony głównej: resources/views/catalog/index.blade.php -> Małe zmiany.
+HTML logowania: resources/views/auth/login.blade.php -> <form.
+HTML rejestracji: resources/views/auth/register.blade.php -> <form.
+HTML koszyka: resources/views/cart.blade.php.
+HTML danych dostawy: resources/views/checkout.blade.php -> Dokończ zamówienie.
+HTML historii: resources/views/orders/index.blade.php; szczegóły: orders/show.blade.php
+(oba w resources/views).
 Otwórz: resources/views/layouts/app.blade.php.
 Znajdź: <!DOCTYPE html>, <head>, asset('css/shop.css'), @yield('content').
 Otwórz: public/css/shop.css — style oraz reguły responsywności.
@@ -70,9 +82,10 @@ Kontroler: app/Http/Controllers/AuthController.php -> register().
 Znajdź: $request->validate(...), $data['role'] = 'customer', User::create($data).
 Wyjaśnienie: serwer sprawdza dane, wymusza rolę klienta i zapisuje model w bazie.
 Przesłanie role=admin z formularza nie nada uprawnień administratora.
-AccountMail::verify($user) wysyła wiadomość aktywacyjną po utworzeniu konta.
+Wywołanie app(AccountMail::class)->verify($user) próbuje wysłać wiadomość aktywacyjną.
+Obsługa wysyłki: app/Services/AccountMail.php -> verify().
 
-7. „GDZIE SZYFRUJESZ HASŁO?”
+7. „GDZIE HASHUJESZ HASŁO?”
 Otwórz: app/Models/User.php -> casts() -> 'password' => 'hashed'.
 Wyjaśnienie: to HASHOWANIE. Laravel zapisuje jednokierunkowy hash przy przypisaniu
 hasła do modelu, także w rejestracji i CRUD administratora.
@@ -93,7 +106,10 @@ pozostałe adresy nie zmieniają ekranu startowego zależnego od roli.
 Wyjaśnienie: po udanym logowaniu zmieniamy identyfikator sesji;
 wylogowanie unieważnia sesję i regeneruje token CSRF.
 Widok: resources/views/auth/login.blade.php.
-Trasy logowania mają throttle:10,1 — ograniczenie liczby żądań.
+Trasa POST logowania ma throttle:10,1 — ograniczenie liczby żądań.
+GET /logowanie wywołuje loginForm() i wyświetla HTML; POST wywołuje login() i sprawdza dane.
+Sprawdzenie tożsamości przez e-mail i hasło to uwierzytelnianie.
+Sprawdzenie, co użytkownikowi wolno (np. roli admin), to autoryzacja — punkt 9.
 
 9. „GDZIE SPRAWDZASZ UPRAWNIENIA?”
 Otwórz: app/Http/Middleware/RequireRole.php -> handle().
@@ -186,10 +202,11 @@ To inne zabezpieczenie niż CSRF lub ucieczka HTML — nie mieszaj tych pojęć.
 CSRF: resources/views/auth/register.blade.php -> @csrf; tak samo pozostałe formularze.
 Trasy web Laravel mają middleware sprawdzający token. Brak/poprawność tokenu
 jest testowana w ShopTest::test_posts_require_csrf().
-Formularze PATCH/DELETE używają @method(...) wraz z POST i @csrf.
+Formularze PUT/PATCH/DELETE używają @method(...) wraz z POST i @csrf.
 XSS: w widokach {{ ... }} ucieka HTML, np. imię i opis produktu.
 Otwórz: resources/views/catalog/show.blade.php i layouts/app.blade.php.
-CSRF chroni przed obcym żądaniem, XSS przed wykonaniem wstrzykniętego kodu w stronie.
+Ochrona CSRF sprawdza token formularza i ogranicza wykonywanie niechcianych akcji
+w zalogowanej sesji. Ucieczka HTML ogranicza wykonanie wstrzykniętego kodu (XSS).
 
 17. „GDZIE KONFIGURUJESZ POCZTĘ I AKTYWACJĘ?”
 Konfiguracja komputera: .env -> MAIL_MAILER=smtp, MAIL_HOST=127.0.0.1, MAIL_PORT=1025.
@@ -233,6 +250,7 @@ Widok: resources/views/catalog/euro.blade.php. Pobieramy kurs EUR z API NBP;
 brak Internetu pokazuje komunikat, bez blokowania zakupów w PLN.
 Testy: tests/Feature/ShopTest.php — funkcje sklepu i przypadki błędne.
 tests/Feature/AccountSecurityTest.php — aktywacja, podpis, reset, wygasanie, sesje.
+tests/Feature/ShopExtensionsTest.php — profil, zdjęcia, anulowanie i potwierdzenia zakupu.
 Konfiguracja testów: phpunit.xml — SQLite :memory:, osobno od domowej MariaDB.
 Uruchomienie: php artisan test (aktualnie 41 testów, 310 asercji).
 Wersje bibliotek: composer.json i composer.lock; na drugim komputerze composer install.
