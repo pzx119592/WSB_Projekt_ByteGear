@@ -182,9 +182,7 @@ bytegear/
 │   └── pozostałe dokumenty .md         ← opis wyglądu i decyzji projektowych
 ├── tools/
 │   ├── Start-Mailpit.ps1               ← uruchomienie lokalnej skrzynki e-mail
-│   ├── Optimize-Demo-Images.php        ← przygotowanie lżejszych grafik WebP
-│   ├── Generate-Beginner-Guide.py      ← tworzenie PDF-a krok po kroku
-│   └── Generate-Cmd-Setup-Guide.py     ← tworzenie PDF-a instalacji od zera w CMD
+│   └── Optimize-Demo-Images.php        ← przygotowanie lżejszych grafik WebP
 ├── tests/Feature/
 │   ├── ShopTest.php                   ← testy podstawowych funkcji sklepu
 │   ├── AccountSecurityTest.php        ← testy aktywacji, resetu i sesji
