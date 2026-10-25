@@ -1,3 +1,5 @@
+# Michał Graczyk, Mateusz Grochociński, Aleksander Grajzer
+
 # ByteGear — instalacja i uruchomienie sklepu
 
 Instrukcja na Windows, od początku. **Polecenia wpisuj w CMD, każde osobno, i naciskaj Enter.**
